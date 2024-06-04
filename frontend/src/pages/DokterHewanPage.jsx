@@ -20,7 +20,7 @@ const Card = ({ image, doctorName, specialty, experience }) => (
         <span className="font-medium">Pengalaman:</span> {experience}
       </p>
       <button className="mt-4 w-full py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300">
-        Lihat Detail
+        <a href="/Detail-dokter-pria">Lihat Detail</a>
       </button>
     </div>
   </div>
