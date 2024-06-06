@@ -42,7 +42,7 @@ const App = () => {
           }
         />
         <Route path="/Register" element={<RegisterPage />} />{" "}
-        <Route path="/Register-Dokter" element={<RegisterDokterPage />} />{" "}
+        <Route path="/Daftar-dokter" element={<RegisterDokterPage />} />{" "}
         <Route path="/Verifikasi" element={<VerifikasiPage />} />{" "}
         <Route path="/Login-Dokter" element={<LoginDokterPage />} />{" "}
         <Route path="/Tentang-kami" element={<AboutUsPageBefore />} />{" "}
