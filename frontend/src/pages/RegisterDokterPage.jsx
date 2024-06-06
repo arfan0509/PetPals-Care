@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Logo from "../assets/images/logo.png";
 import "aos/dist/aos.css";
@@ -22,6 +22,10 @@ const RegisterDoctorPage = () => {
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
+  useEffect(() => {
+    AOS.init({ duration: 1000 });
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -111,7 +115,7 @@ const RegisterDoctorPage = () => {
 
         {/* kanan */}
         <div className="w-1/2 h-full flex justify-center items-center">
-          <div className="w-full p-20 text-center">
+          <div className="w-full p-20 text-center" data-aos="fade-up">
             <div className="text-lg w-auto h-auto font-semibold">
               <h1 className="">Daftar Akun Dokter Hewan</h1>
             </div>
