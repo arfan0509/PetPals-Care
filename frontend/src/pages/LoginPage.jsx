@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Logo from "../assets/images/logo.png";
 import "aos/dist/aos.css";
 import AOS from "aos";
@@ -30,29 +31,33 @@ const LoginPage = () => {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+      const response = await axios.post(
+        "http://localhost:5000/api/users/login",
+        {
           email,
           password,
-        }),
-      });
+        }
+      );
 
-      const data = await response.json();
-
-      if (response.ok) {
+      if (response.status === 200) {
+        const data = response.data;
         localStorage.setItem("userData", JSON.stringify(data.user));
         localStorage.setItem("accessToken", data.accessToken);
         window.location.href = "/beranda";
       } else {
-        setError(data.message);
+        setError("Login gagal, silakan coba lagi.");
       }
     } catch (error) {
       console.error("Error:", error);
-      setError("Terjadi kesalahan saat melakukan login.");
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setError(error.response.data.message);
+      } else {
+        setError("Terjadi kesalahan saat melakukan login.");
+      }
     }
   };
 

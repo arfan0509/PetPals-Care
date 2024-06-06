@@ -31,7 +31,7 @@ const App = () => {
         <Route path="*" element={<Navigate to="/Login-PetPalsCare" />} />
 
         <Route path="/Login-PetPalsCare" element={<LoginPage />} />
-        <Route path="/Register" element={<RegisterPage />} />
+        <Route path="/Daftar-PetPalsCare" element={<RegisterPage />} />
         <Route path="/Daftar-dokter" element={<RegisterDokterPage />} />
         <Route path="/Verifikasi" element={<VerifikasiPage />} />
         <Route path="/Login-Dokter" element={<LoginDokterPage />} />
