@@ -112,7 +112,7 @@ const LoginPage = () => {
               </button>
             </a>
           </div>
-          <div className="flex justify-center items-center " data-aos="fade-up">
+          <div className="flex justify-center items-center">
             <a href="/Login-dokter" className="text-[#777]">
               Masuk Sebagai Dokter Hewan
             </a>
