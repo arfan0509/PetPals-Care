@@ -6,6 +6,8 @@ import AOS from "aos";
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
@@ -22,6 +24,11 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!email || !password) {
+      setError("Email dan kata sandi harus diisi.");
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:5000/api/users/login", {
         method: "POST",
@@ -37,19 +44,20 @@ const LoginPage = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Login berhasil, simpan token dan lakukan navigasi ke halaman setelah login
         localStorage.setItem("userData", JSON.stringify(data.user));
         localStorage.setItem("accessToken", data.accessToken);
-        window.location.href = "/beranda"; // Ganti dengan URL halaman setelah login
+        window.location.href = "/beranda";
       } else {
-        // Login gagal, tampilkan pesan kesalahan
-        alert(data.message);
+        setError(data.message);
       }
     } catch (error) {
-      // Tangani kesalahan jika terjadi
       console.error("Error:", error);
-      alert("Terjadi kesalahan saat melakukan login.");
+      setError("Terjadi kesalahan saat melakukan login.");
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -63,6 +71,7 @@ const LoginPage = () => {
             <h1 className="">Masuk Akun PetPals Care</h1>
           </div>
           <form onSubmit={handleSubmit}>
+            {error && <div className="text-red-500">{error}</div>}
             <div className="py-4">
               <input
                 type="email"
@@ -72,14 +81,25 @@ const LoginPage = () => {
                 onChange={handleEmailChange}
               />
             </div>
-            <div>
+            <div className="relative py-4">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 className="shadow appearance-none border rounded w-full py-2 px-3 bg-[#eee] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 placeholder="Kata Sandi"
                 value={password}
                 onChange={handlePasswordChange}
               />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute inset-y-0 right-0 px-3 py-2"
+              >
+                {showPassword ? (
+                  <i className="fas fa-eye-slash"></i>
+                ) : (
+                  <i className="fas fa-eye"></i>
+                )}
+              </button>
             </div>
             <div className="p-4">
               <button

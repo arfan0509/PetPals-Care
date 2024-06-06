@@ -14,6 +14,9 @@ import RegisterDokterPage from "./pages/RegisterDokterPage";
 import VerifikasiPage from "./pages/VerifikasiPage";
 import LoginDokterPage from "./pages/LoginDokterPage";
 import AboutUsPageBefore from "./pages/AboutUsPageBefore";
+import DokterHewanPage from "./pages/DokterHewanPage";
+import AdopsiPage from "./pages/AdopsiPage";
+import AboutUsPageAfter from "./pages/AboutUsPageAfter";
 
 const PrivateRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("accessToken");
@@ -24,7 +27,16 @@ const App = () => {
   return (
     <Router>
       <Routes>
+        <Route path="/" element={<HomepageBefore />} />
+        <Route path="*" element={<Navigate to="/Login-PetPalsCare" />} />
+
         <Route path="/Login-PetPalsCare" element={<LoginPage />} />
+        <Route path="/Register" element={<RegisterPage />} />
+        <Route path="/Daftar-dokter" element={<RegisterDokterPage />} />
+        <Route path="/Verifikasi" element={<VerifikasiPage />} />
+        <Route path="/Login-Dokter" element={<LoginDokterPage />} />
+        <Route path="/Tentang-kami" element={<AboutUsPageBefore />} />
+
         <Route
           path="/Beranda"
           element={
@@ -41,13 +53,31 @@ const App = () => {
             </PrivateRoute>
           }
         />
-        <Route path="/Register" element={<RegisterPage />} />{" "}
-        <Route path="/Daftar-dokter" element={<RegisterDokterPage />} />{" "}
-        <Route path="/Verifikasi" element={<VerifikasiPage />} />{" "}
-        <Route path="/Login-Dokter" element={<LoginDokterPage />} />{" "}
-        <Route path="/Tentang-kami" element={<AboutUsPageBefore />} />{" "}
-        <Route path="/" element={<HomepageBefore />} />{" "}
-        <Route path="*" element={<Navigate to="/Login-PetPalsCare" />} />
+
+        <Route
+          path="/Dokter-hewan"
+          element={
+            <PrivateRoute>
+              <DokterHewanPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/Adopsi-hewan"
+          element={
+            <PrivateRoute>
+              <AdopsiPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/TentangKami"
+          element={
+            <PrivateRoute>
+              <AboutUsPageAfter />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   );

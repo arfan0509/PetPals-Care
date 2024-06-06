@@ -6,7 +6,7 @@ const logoutUser = () => {
   localStorage.removeItem("accessToken");
   localStorage.removeItem("user");
   // Redirect ke halaman login atau halaman lain yang sesuai
-  window.location.href = "/Login-PetPalsCare";
+  window.location.href = "/";
 };
 
 const ProfilUserPage = () => {
