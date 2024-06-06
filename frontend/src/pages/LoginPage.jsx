@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import Logo from "../assets/images/logo.png";
 import "aos/dist/aos.css";
 import AOS from "aos";
@@ -38,8 +38,9 @@ const LoginPage = () => {
 
       if (response.ok) {
         // Login berhasil, simpan token dan lakukan navigasi ke halaman setelah login
+        localStorage.setItem("userData", JSON.stringify(data.user));
         localStorage.setItem("accessToken", data.accessToken);
-        window.location.href = "/Beranda"; // Ganti dengan URL halaman setelah login
+        window.location.href = "/beranda"; // Ganti dengan URL halaman setelah login
       } else {
         // Login gagal, tampilkan pesan kesalahan
         alert(data.message);

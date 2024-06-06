@@ -204,6 +204,7 @@ const HomepageBefore = () => {
         <Navbar />
       </div>
       <div
+        id="hero"
         className="relative w-full h-screen bg-cover bg-center"
         style={{ backgroundImage: `url(${heroImage})` }}
         data-aos="fade-in"

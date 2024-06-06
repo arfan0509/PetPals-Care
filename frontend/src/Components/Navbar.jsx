@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Link as ScrollLink, animateScroll as scroll } from "react-scroll";
+import { Link as ScrollLink } from "react-scroll";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="bg-[#F7DBA7] shadow-lg font-poppins">
+    <nav className="bg-[#F7DBA7] shadow-lg font-poppins fixed top-0 w-full z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-20">
           {/* Logo Section */}
