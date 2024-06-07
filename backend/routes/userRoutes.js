@@ -3,6 +3,7 @@ import {
   registerUser,
   loginUser,
   logoutUser,
+  getUsers,
 } from "../controllers/userController.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
 import verifyToken from "../middleware/VerifyToken.js";
@@ -15,8 +16,6 @@ router.get("/refresh-token", refreshToken);
 router.delete("/logout", logoutUser);
 
 // Rute yang memerlukan otentikasi
-router.get("/protected-route", verifyToken, (req, res) => {
-  res.json({ message: "This is a protected route", user: req.user });
-});
+router.get("/users-data", verifyToken, getUsers);
 
 export default router;
