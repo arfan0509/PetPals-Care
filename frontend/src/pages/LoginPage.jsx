@@ -36,13 +36,14 @@ const LoginPage = () => {
         {
           email,
           password,
-        }
+        },
+        { withCredentials: true } // Ensure cookies are included
       );
 
       if (response.status === 200) {
-        const data = response.data;
-        localStorage.setItem("userData", JSON.stringify(data.user));
-        localStorage.setItem("accessToken", data.accessToken);
+        const { accessToken, refreshToken } = response.data;
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
         window.location.href = "/beranda";
       } else {
         setError("Login gagal, silakan coba lagi.");
