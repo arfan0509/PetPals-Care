@@ -5,10 +5,16 @@ import axios from "../context/axiosConfig";
 import { jwtDecode } from "jwt-decode";
 import EditProfileModal from "../Components/EditProfileModal";
 
-const logoutUser = () => {
-  localStorage.removeItem("accessToken");
-  localStorage.removeItem("refreshToken");
-  window.location.href = "/";
+const logoutUser = async () => {
+  try {
+    await axios.delete("/users/logout");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    window.location.href = "/";
+  } catch (error) {
+    console.error("Failed to logout:", error);
+    // Tindakan penanganan kesalahan jika diperlukan
+  }
 };
 
 const ProfilUserPage = () => {
@@ -21,6 +27,8 @@ const ProfilUserPage = () => {
       const accessToken = localStorage.getItem("accessToken");
       if (!accessToken) {
         setError("User not authenticated");
+        // Navigasi ke halaman login jika tidak ada accessToken
+        window.location.href = "/login"; // Ubah rute sesuai dengan rute login Anda
         return;
       }
 
@@ -34,7 +42,9 @@ const ProfilUserPage = () => {
         setUserData(response.data[0]); // Karena responsenya berupa array
       } catch (err) {
         console.error(err);
-        setError("Failed to fetch user data");
+        setError("Gagal memuat data user");
+        // Navigasi ke halaman login jika gagal memuat data pengguna
+        window.location.href = "/Login-PetPalsCare"; // Ubah rute sesuai dengan rute login Anda
       }
     };
 
