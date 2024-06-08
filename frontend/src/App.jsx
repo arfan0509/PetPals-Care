@@ -17,6 +17,8 @@ import AboutUsPageBefore from "./pages/AboutUsPageBefore";
 import DokterHewanPage from "./pages/DokterHewanPage";
 import AdopsiPage from "./pages/AdopsiPage";
 import AboutUsPageAfter from "./pages/AboutUsPageAfter";
+import PetDetailPage from "./pages/PetDetailPage";
+import ProfilDokter from "./pages/ProfilDokter";
 
 const PrivateRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("accessToken");
@@ -36,6 +38,9 @@ const App = () => {
         <Route path="/Verifikasi" element={<VerifikasiPage />} />
         <Route path="/Login-Dokter" element={<LoginDokterPage />} />
         <Route path="/Tentang-kami" element={<AboutUsPageBefore />} />
+        <Route path="/Detail-hewan" element={<PetDetailPage />} />
+        <Route path="/Profil-dokter" element={<ProfilDokter />} />
+        <Route path="/Daftar-dokter-hewan" element={<DokterHewanPage />} />
 
         <Route
           path="/Beranda"
@@ -75,6 +80,22 @@ const App = () => {
           element={
             <PrivateRoute>
               <AboutUsPageAfter />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/Detail-hewan"
+          element={
+            <PrivateRoute>
+              <PetDetailPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/Profil-dokter"
+          element={
+            <PrivateRoute>
+              <ProfilDokter />
             </PrivateRoute>
           }
         />

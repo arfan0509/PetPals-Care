@@ -250,7 +250,7 @@ const HomepageAfter = () => {
               Rekomendasi Dokter Hewan
             </div>
           </div>
-          <a href="/Daftar-dokter-hewan">
+          <a href="/Dokter-hewan">
             <button className="bg-[#ED9455] py-2 px-4 hover:bg-[#f89b59] transition duration-300 rounded-md flex justify-center items-center">
               <span className="text-white">Tampilkan Lainnya</span>
             </button>
@@ -305,9 +305,11 @@ const HomepageAfter = () => {
               Hewan yang Siap diadopsi
             </div>
           </div>
-          <button className="bg-[#ED9455] py-2 px-4 hover:bg-[#f89b59] transition duration-300 rounded-md flex justify-center items-center">
-            <span className="text-white">Tampilkan Semua</span>
-          </button>
+          <a href="/Adopsi-hewan">
+            <button className="bg-[#ED9455] py-2 px-4 hover:bg-[#f89b59] transition duration-300 rounded-md flex justify-center items-center">
+              <span className="text-white">Tampilkan Semua</span>
+            </button>
+          </a>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {petData.map((pet) => (
