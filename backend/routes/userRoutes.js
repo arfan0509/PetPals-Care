@@ -4,6 +4,7 @@ import {
   loginUser,
   logoutUser,
   getUsers,
+  updateUser,
 } from "../controllers/userController.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
 import verifyToken from "../middleware/VerifyToken.js";
@@ -17,5 +18,6 @@ router.delete("/logout", logoutUser);
 
 // Rute yang memerlukan otentikasi
 router.get("/users-data", verifyToken, getUsers);
+router.put("/update-data", verifyToken, updateUser);
 
 export default router;

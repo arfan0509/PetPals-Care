@@ -3,6 +3,7 @@ import axios from "axios";
 import Logo from "../assets/images/logo.png";
 import "aos/dist/aos.css";
 import AOS from "aos";
+import axiosInstance from "../context/axiosConfig";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -31,14 +32,10 @@ const LoginPage = () => {
     }
 
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/users/login",
-        {
-          email,
-          password,
-        },
-        { withCredentials: true } // Ensure cookies are included
-      );
+      const response = await axiosInstance.post("/users/login", {
+        email,
+        password,
+      });
 
       if (response.status === 200) {
         const { accessToken, refreshToken } = response.data;
