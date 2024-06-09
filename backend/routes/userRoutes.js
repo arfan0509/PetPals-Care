@@ -9,7 +9,7 @@ import {
 } from "../controllers/userController.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
 import verifyToken from "../middleware/VerifyToken.js";
-import upload from "../middleware/multer.js";
+import uploadUser from "../middleware/multerUser.js";
 
 const router = express.Router();
 
@@ -24,7 +24,7 @@ router.put("/update-data", verifyToken, updateUser);
 router.put(
   "/update-photo",
   verifyToken,
-  upload.single("foto"),
+  uploadUser.single("foto"),
   updateUserPhoto
 );
 

@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import pool from "../database/Database.js";
+import fs from "fs";
 
 // Fungsi untuk meregistrasi dokter
 export const registerDoctor = async (req, res) => {
@@ -125,26 +126,32 @@ export const logoutDoctor = async (req, res) => {
 // Fungsi untuk mengunggah foto dokter
 export const updateDoctorPhoto = async (req, res) => {
   const doctorId = req.user.id; // Mengambil ID dokter dari token akses
-  const foto = req.file ? req.file.filename : null; // Mendapatkan nama file jika ada
+  const newFoto = req.file ? req.file.filename : null; // Mendapatkan nama file baru jika ada
 
-  if (!foto) {
+  if (!newFoto) {
     return res.status(400).json({ message: "No file uploaded" });
   }
 
   try {
-    const query = "UPDATE dokter SET foto = ? WHERE id_dokter = ?";
-    const [result] = await pool.query(query, [foto, doctorId]);
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "Doctor not found" });
-    }
-
-    const [updatedDoctor] = await pool.query(
-      "SELECT id_dokter, nama, no_hp, email, gender, usia, alamat, lulusan, spesialis, biaya, pengalaman, foto FROM dokter WHERE id_dokter = ?",
+    // Periksa apakah dokter sebelumnya memiliki foto profil yang disimpan di server
+    const [doctorData] = await pool.query(
+      "SELECT foto FROM dokter WHERE id_dokter = ?",
       [doctorId]
     );
+    const oldFoto = doctorData[0].foto;
 
-    res.json(updatedDoctor[0]);
+    // Jika dokter sebelumnya memiliki foto profil, hapus file lama dari sistem file
+    if (oldFoto) {
+      fs.unlinkSync(`./uploads/pp_dokter/${oldFoto}`);
+    }
+
+    // Update database dengan nama file baru
+    await pool.query("UPDATE dokter SET foto = ? WHERE id_dokter = ?", [
+      newFoto,
+      doctorId,
+    ]);
+
+    res.status(200).json({ message: "Doctor photo updated successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

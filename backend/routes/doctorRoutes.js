@@ -3,9 +3,11 @@ import {
   registerDoctor,
   loginDoctor,
   logoutDoctor,
+  updateDoctorPhoto,
 } from "../controllers/doctorController.js";
 import { refreshTokenDoctor } from "../controllers/RefreshToken.js";
 import verifyToken from "../middleware/VerifyToken.js";
+import uploadDoctor from "../middleware/multerDoctor.js";
 
 const router = express.Router();
 
@@ -15,8 +17,11 @@ router.get("/refresh-token", refreshTokenDoctor);
 router.delete("/logout", logoutDoctor);
 
 // Rute yang memerlukan otentikasi
-router.get("/protected-route", verifyToken, (req, res) => {
-  res.json({ message: "This is a protected route", doctor: req.user });
-});
+router.put(
+  "/update-photo",
+  verifyToken,
+  uploadDoctor.single("foto"),
+  updateDoctorPhoto
+);
 
 export default router;
