@@ -143,3 +143,30 @@ export const logoutUser = async (req, res) => {
 };
 
 //upload gambar
+export const updateUserPhoto = async (req, res) => {
+  const userId = req.user.id; // Mengambil ID pengguna dari token akses
+  const foto = req.file ? req.file.filename : null; // Mendapatkan nama file jika ada
+
+  if (!foto) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
+
+  try {
+    const query = "UPDATE users SET foto = ? WHERE id_user = ?";
+    const [result] = await pool.query(query, [foto, userId]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const [updatedUser] = await pool.query(
+      "SELECT id_user, nama, no_hp, email, gender, usia, alamat, foto FROM users WHERE id_user = ?",
+      [userId]
+    );
+
+    res.json(updatedUser[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};

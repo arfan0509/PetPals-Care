@@ -2,6 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import pool from "../database/Database.js";
 
+// Fungsi untuk meregistrasi dokter
 export const registerDoctor = async (req, res) => {
   const {
     nama,
@@ -54,6 +55,7 @@ export const registerDoctor = async (req, res) => {
   }
 };
 
+// Fungsi untuk login dokter
 export const loginDoctor = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -95,6 +97,7 @@ export const loginDoctor = async (req, res) => {
   }
 };
 
+// Fungsi untuk logout dokter
 export const logoutDoctor = async (req, res) => {
   const { refreshToken } = req.cookies;
   if (!refreshToken) return res.sendStatus(204); // No Content
@@ -116,5 +119,34 @@ export const logoutDoctor = async (req, res) => {
     return res.sendStatus(200); // OK
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+// Fungsi untuk mengunggah foto dokter
+export const updateDoctorPhoto = async (req, res) => {
+  const doctorId = req.user.id; // Mengambil ID dokter dari token akses
+  const foto = req.file ? req.file.filename : null; // Mendapatkan nama file jika ada
+
+  if (!foto) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
+
+  try {
+    const query = "UPDATE dokter SET foto = ? WHERE id_dokter = ?";
+    const [result] = await pool.query(query, [foto, doctorId]);
+
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Doctor not found" });
+    }
+
+    const [updatedDoctor] = await pool.query(
+      "SELECT id_dokter, nama, no_hp, email, gender, usia, alamat, lulusan, spesialis, biaya, pengalaman, foto FROM dokter WHERE id_dokter = ?",
+      [doctorId]
+    );
+
+    res.json(updatedDoctor[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 };
