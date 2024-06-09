@@ -1,6 +1,7 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import pool from "../database/Database.js";
+import fs from "fs";
 
 export const getUsers = async (req, res) => {
   const userId = req.user.id; // Mengambil ID pengguna dari token akses
@@ -145,26 +146,35 @@ export const logoutUser = async (req, res) => {
 //upload gambar
 export const updateUserPhoto = async (req, res) => {
   const userId = req.user.id; // Mengambil ID pengguna dari token akses
-  const foto = req.file ? req.file.filename : null; // Mendapatkan nama file jika ada
+  const newFoto = req.file ? req.file.filename : null; // Mendapatkan nama file baru jika ada
 
-  if (!foto) {
+  if (!newFoto) {
     return res.status(400).json({ message: "No file uploaded" });
   }
 
   try {
-    const query = "UPDATE users SET foto = ? WHERE id_user = ?";
-    const [result] = await pool.query(query, [foto, userId]);
-
-    if (result.affectedRows === 0) {
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const [updatedUser] = await pool.query(
-      "SELECT id_user, nama, no_hp, email, gender, usia, alamat, foto FROM users WHERE id_user = ?",
+    // Periksa apakah pengguna sebelumnya memiliki foto profil yang disimpan di server
+    const [userData] = await pool.query(
+      "SELECT foto FROM users WHERE id_user = ?",
       [userId]
     );
+    const oldFoto = userData[0].foto;
 
-    res.json(updatedUser[0]);
+    // Jika pengguna sebelumnya memiliki foto profil, hapus file lama dari sistem file
+    if (oldFoto) {
+      const oldFotoPath = `./uploads/pp_users/${oldFoto}`;
+      if (fs.existsSync(oldFotoPath)) {
+        fs.unlinkSync(oldFotoPath);
+      }
+    }
+
+    // Update database dengan nama file baru
+    await pool.query("UPDATE users SET foto = ? WHERE id_user = ?", [
+      newFoto,
+      userId,
+    ]);
+
+    res.status(200).json({ message: "User photo updated successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
