@@ -1,8 +1,6 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import pool from "../database/Database.js";
-import multer from "multer";
-import path from "path";
 
 export const getUsers = async (req, res) => {
   const userId = req.user.id; // Mengambil ID pengguna dari token akses
