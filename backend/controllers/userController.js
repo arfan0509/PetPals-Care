@@ -144,6 +144,7 @@ export const logoutUser = async (req, res) => {
 };
 
 //upload gambar
+//upload gambar
 export const updateUserPhoto = async (req, res) => {
   const userId = req.user.id; // Mengambil ID pengguna dari token akses
   const newFoto = req.file ? req.file.filename : null; // Mendapatkan nama file baru jika ada
@@ -174,7 +175,18 @@ export const updateUserPhoto = async (req, res) => {
       userId,
     ]);
 
-    res.status(200).json({ message: "User photo updated successfully" });
+    // Tentukan jalur relatif ke direktori penyimpanan
+    const photoDir = "/uploads/pp_users/";
+
+    // Buat URL gambar dari nama file
+    const photoUrl = `${req.protocol}://${req.get(
+      "host"
+    )}${photoDir}${newFoto}`;
+
+    // Kirim URL gambar dalam tanggapan
+    res
+      .status(200)
+      .json({ message: "User photo updated successfully", photoUrl });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
