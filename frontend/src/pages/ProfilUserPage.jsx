@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar-after";
-import Footer from "../Components/Footer-after";
 import axios from "../context/axiosConfig";
 import { jwtDecode } from "jwt-decode";
 import EditProfileModal from "../Components/EditProfileModal";
@@ -88,7 +87,7 @@ const ProfilUserPage = () => {
   return (
     <>
       <Navbar />
-      <div className="bg-white-light-2 w-full h-auto flex justify-start">
+      <div className="bg-white-light-2 w-full h-auto flex justify-start font-poppins">
         <div className="w-1/3 h-screen p-8">
           <ul>
             <li className="p-2 hover:bg-gray-400 border-collapse rounded-lg">
@@ -133,7 +132,7 @@ const ProfilUserPage = () => {
               </div>
               ;
               <div>
-                <h1>{userData.nama}</h1>
+                <h1 className="text-xl font-medium">{userData.nama}</h1>
                 <p>Pengasuh Setia</p>
               </div>
             </div>
