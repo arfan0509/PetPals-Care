@@ -1,7 +1,13 @@
-import React, { useState } from "react";
-import axios from "../context/axiosConfig";
+import React, { useState, useEffect } from "react";
+import axiosInstance from "../context/axiosConfig";
+import AOS from "aos"; // Import AOS library
+import "aos/dist/aos.css"; // Import CSS for AOS
 
 const EditProfileModal = ({ userData, onClose, onUpdate }) => {
+  useEffect(() => {
+    AOS.init(); // Initialize AOS
+  }, []);
+
   const [formData, setFormData] = useState({
     nama: userData.nama,
     no_hp: userData.no_hp,
@@ -21,7 +27,7 @@ const EditProfileModal = ({ userData, onClose, onUpdate }) => {
     const accessToken = localStorage.getItem("accessToken");
 
     try {
-      await axios.put("/users/update-data", formData, {
+      await axiosInstance.put("/users/update-data", formData, {
         headers: {
           Authorization: `Bearer ${accessToken}`,
         },
@@ -35,8 +41,11 @@ const EditProfileModal = ({ userData, onClose, onUpdate }) => {
   };
 
   return (
-    <div className="fixed inset-0 flex justify-center items-center">
-      <div className="bg-white p-6 rounded-lg h-4/5 overflow-y-auto w-2/3">
+    <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center">
+      <div
+        className="bg-white p-6 rounded-lg h-4/5 overflow-y-auto w-2/3"
+        data-aos="fade-up"
+      >
         <h2 className="text-xl font-bold mb-4">Edit Profil</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
