@@ -2,11 +2,16 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
-import path from "path";
 import userRoutes from "./routes/userRoutes.js";
 import doctorRoutes from "./routes/doctorRoutes.js";
+import { fileDir } from "./utils/filehandler.cjs";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 
 dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 
@@ -17,10 +22,11 @@ app.use(
   })
 );
 
+// Menyajikan folder uploads/profile secara publik
+app.use("/uploads", express.static(fileDir()));
+
 app.use(cookieParser());
 app.use(express.json());
-const __dirname = path.dirname(new URL(import.meta.url).pathname); // Mendapatkan direktori saat ini
-app.use(express.static(path.join(__dirname, "uploads"))); // Pastikan untuk menyajikan folder uploads
 
 app.use("/api/users", userRoutes);
 app.use("/api/doctors", doctorRoutes);

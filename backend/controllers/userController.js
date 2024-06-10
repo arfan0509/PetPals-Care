@@ -143,7 +143,7 @@ export const logoutUser = async (req, res) => {
   }
 };
 
-//upload gambar
+// Upload gambar
 //upload gambar
 export const updateUserPhoto = async (req, res) => {
   const userId = req.user.id; // Mengambil ID pengguna dari token akses
@@ -163,7 +163,7 @@ export const updateUserPhoto = async (req, res) => {
 
     // Jika pengguna sebelumnya memiliki foto profil, hapus file lama dari sistem file
     if (oldFoto) {
-      const oldFotoPath = `./uploads/pp_users/${oldFoto}`;
+      const oldFotoPath = `../uploads/profile/${oldFoto}`;
       if (fs.existsSync(oldFotoPath)) {
         fs.unlinkSync(oldFotoPath);
       }
@@ -176,7 +176,7 @@ export const updateUserPhoto = async (req, res) => {
     ]);
 
     // Tentukan jalur relatif ke direktori penyimpanan
-    const photoDir = "/uploads/pp_users/";
+    const photoDir = "/uploads/";
 
     // Buat URL gambar dari nama file
     const photoUrl = `${req.protocol}://${req.get(
