@@ -1,7 +1,32 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axiosInstance from "../context/axiosConfig"; // Import axiosInstance yang telah didefinisikan sebelumnya
+import { jwtDecode } from "jwt-decode";
 
 function NavbarAfter() {
   const [isOpen, setIsOpen] = useState(false);
+  const [userData, setUserData] = useState(null);
+
+  // Fungsi untuk mengambil data pengguna dari server
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const accessToken = localStorage.getItem("accessToken");
+      if (!accessToken) {
+        // Handle jika pengguna tidak terautentikasi
+        console.error("User not authenticated");
+        return;
+      }
+
+      try {
+        const decodedToken = jwtDecode(accessToken);
+        const response = await axiosInstance.get("/users/users-data");
+        setUserData(response.data[0]); // Karena responsenya berupa array
+      } catch (error) {
+        console.error("Failed to fetch user data", error);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   return (
     <nav className="bg-[#F7DBA7] shadow-lg font-poppins">
@@ -57,7 +82,15 @@ function NavbarAfter() {
             <div className="relative">
               <a href="/Profil">
                 <button className="ml-[120px] flex items-center justify-center w-12 h-12 bg-white border border-[#ED9455] text-[#ED9455] rounded-full hover:bg-[#f89b59] hover:text-white transition duration-300">
-                  <i className="fas fa-user text-lg"></i>
+                  {userData && userData.url_foto ? (
+                    <img
+                      src={userData.url_foto}
+                      alt="User Photo"
+                      className="w-full h-full object-cover rounded-full"
+                    />
+                  ) : (
+                    <i className="fas fa-user text-lg"></i>
+                  )}
                 </button>
               </a>
             </div>

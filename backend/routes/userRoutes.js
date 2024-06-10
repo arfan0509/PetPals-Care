@@ -6,6 +6,9 @@ import {
   getUsers,
   updateUser,
   updateUserPhoto,
+  changePassword,
+  deletePhoto,
+  deleteAccount,
 } from "../controllers/userController.js";
 import { refreshToken } from "../controllers/RefreshToken.js";
 import verifyToken from "../middleware/VerifyToken.js";
@@ -27,5 +30,8 @@ router.put(
   uploadPP.single("foto"),
   updateUserPhoto
 );
+router.put("/change-password", verifyToken, changePassword);
+router.delete("/delete-photo", verifyToken, deletePhoto);
+router.delete("/delete-account", verifyToken, deleteAccount);
 
 export default router;

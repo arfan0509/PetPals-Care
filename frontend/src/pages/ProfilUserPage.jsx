@@ -4,6 +4,7 @@ import Footer from "../Components/Footer-after";
 import axios from "../context/axiosConfig";
 import { jwtDecode } from "jwt-decode";
 import EditProfileModal from "../Components/EditProfileModal";
+import UploadPhotoModal from "../Components/UploadPhotoModal";
 
 const logoutUser = async () => {
   try {
@@ -20,7 +21,8 @@ const logoutUser = async () => {
 const ProfilUserPage = () => {
   const [userData, setUserData] = useState(null);
   const [error, setError] = useState("");
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false); // State untuk mengontrol visibilitas modal upload gambar
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -28,7 +30,7 @@ const ProfilUserPage = () => {
       if (!accessToken) {
         setError("User not authenticated");
         // Navigasi ke halaman login jika tidak ada accessToken
-        window.location.href = "/login"; // Ubah rute sesuai dengan rute login Anda
+        window.location.href = "/Login-PetPalsCare"; // Ubah rute sesuai dengan rute login Anda
         return;
       }
 
@@ -51,16 +53,28 @@ const ProfilUserPage = () => {
     fetchUserData();
   }, []);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
+  const handleOpenEditModal = () => {
+    setIsEditModalOpen(true);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+  };
+
+  const handleOpenUploadModal = () => {
+    setIsUploadModalOpen(true);
+  };
+
+  const handleCloseUploadModal = () => {
+    setIsUploadModalOpen(false);
   };
 
   const handleUpdateUser = (updatedUser) => {
     setUserData(updatedUser);
+  };
+
+  const handleUpdatePhoto = (photoUrl) => {
+    setUserData({ ...userData, url_foto: photoUrl });
   };
 
   if (error) {
@@ -102,10 +116,22 @@ const ProfilUserPage = () => {
           <div className="bg-white p-10 rounded-xl w-full h-auto shadow-2xl">
             <h1 className="py-4 font-bold text-1xl">Profil Saya</h1>
             <div className="flex justify-start items-center gap-4 pt-6">
-              <div className="w-[100px] h-[100px] bg-orange-400 rounded-full flex justify-center items-center">
-                <p>{userData.nama.charAt(0)}</p>
+              <div
+                className="w-[100px] h-[100px] bg-white border border-[#ED9455] rounded-full flex justify-center items-center"
+                onClick={handleOpenUploadModal}
+                style={{ cursor: "pointer" }}
+              >
+                {userData.url_foto ? (
+                  <img
+                    src={userData.url_foto}
+                    alt="User Photo"
+                    className="w-full h-full object-cover rounded-full"
+                  />
+                ) : (
+                  <i className="fas fa-user text-4xl text-[#ED9455]"></i>
+                )}
               </div>
-
+              ;
               <div>
                 <h1>{userData.nama}</h1>
                 <p>Pengasuh Setia</p>
@@ -134,20 +160,28 @@ const ProfilUserPage = () => {
               <p>{userData.alamat}</p>
             </div>
             <button
-              onClick={handleOpenModal}
-              className="mt-4 py-2 px-4 bg-blue-600 text-white rounded"
+              onClick={handleOpenEditModal}
+              className="mt-4 py-2 px-4 bg-[#DE9455] text-white hover:bg-[#f89b59] transition duration-300 rounded"
             >
               Edit Profil
             </button>
           </div>
         </div>
       </div>
-      <Footer />
-      {isModalOpen && (
+
+      {isEditModalOpen && (
         <EditProfileModal
           userData={userData}
-          onClose={handleCloseModal}
+          onClose={handleCloseEditModal}
           onUpdate={handleUpdateUser}
+        />
+      )}
+
+      {isUploadModalOpen && (
+        <UploadPhotoModal
+          userId={userData.id_user}
+          onClose={handleCloseUploadModal}
+          onUpdate={handleUpdatePhoto}
         />
       )}
     </>

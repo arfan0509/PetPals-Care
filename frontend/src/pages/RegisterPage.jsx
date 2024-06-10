@@ -135,7 +135,7 @@ const RegisterPage = () => {
               </div>
               <div className="py-2" data-aos="fade-up">
                 <input
-                  type="text"
+                  type="number"
                   name="no_hp"
                   value={formData.no_hp}
                   onChange={handleChange}
@@ -203,13 +203,13 @@ const RegisterPage = () => {
                   className="shadow appearance-none border rounded w-full py-2 px-3 bg-[#eee] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 >
                   <option value="">Pilih Gender</option>
-                  <option value="Male">Laki-laki</option>
-                  <option value="Female">Perempuan</option>
+                  <option value="Laki-laki">Laki-laki</option>
+                  <option value="Perempuan">Perempuan</option>
                 </select>
               </div>
               <div className="py-2" data-aos="fade-up">
                 <input
-                  type="text"
+                  type="number"
                   name="usia"
                   value={formData.usia}
                   onChange={handleChange}
