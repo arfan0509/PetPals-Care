@@ -20,6 +20,7 @@ import AdopsiPage from "./pages/AdopsiPage";
 import AboutUsPageAfter from "./pages/AboutUsPageAfter";
 import GantiPasswordUser from "./pages/GantiPasswordUser";
 import GantiPasswordDokter from "./pages/GantipasswordDokter";
+import DetailDokter from "./pages/DetailDokter";
 
 const PrivateRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("accessToken");
@@ -104,6 +105,15 @@ const App = () => {
           element={
             <PrivateRoute>
               <GantiPasswordDokter />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/doctor/:id"
+          element={
+            <PrivateRoute>
+              <DetailDokter />
             </PrivateRoute>
           }
         />

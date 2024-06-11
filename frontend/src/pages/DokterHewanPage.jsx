@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar-after";
 import Footer from "../Components/Footer-after";
 import axios from "../context/axiosConfig";
 import DokterHewan from "../assets/images/DokterHewan.png";
 
 // Komponen Kartu (Card) yang menerima properti teks
-const Card = ({ image, doctorName, specialty, experience }) => (
+const Card = ({ image, doctorName, specialty, experience, onDetailClick }) => (
   <div className="max-w-sm bg-white rounded-xl shadow-lg overflow-hidden flex flex-col items-center font-poppins">
     {image ? (
       <img className="w-full h-60 object-cover" src={image} alt="Dokter" />
@@ -24,8 +25,11 @@ const Card = ({ image, doctorName, specialty, experience }) => (
       <p className="text-gray-500 text-sm mt-1">
         <span className="font-medium">Pengalaman:</span> {experience}
       </p>
-      <button className="mt-4 w-full py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300">
-        <a href="/Detail-dokter-pria">Lihat Detail</a>
+      <button
+        className="mt-4 w-full py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300"
+        onClick={onDetailClick}
+      >
+        Lihat Detail
       </button>
     </div>
   </div>
@@ -33,6 +37,7 @@ const Card = ({ image, doctorName, specialty, experience }) => (
 
 const DokterHewanPage = () => {
   const [doctors, setDoctors] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchDoctors = async () => {
@@ -46,6 +51,10 @@ const DokterHewanPage = () => {
 
     fetchDoctors();
   }, []);
+
+  const handleDetailClick = (doctorId) => {
+    navigate(`/doctor/${doctorId}`);
+  };
 
   return (
     <>
@@ -75,12 +84,12 @@ const DokterHewanPage = () => {
                 doctorName={doctor.nama}
                 specialty={doctor.spesialis}
                 experience={doctor.pengalaman}
+                onDetailClick={() => handleDetailClick(doctor.id_dokter)}
               />
             </div>
           ))}
         </div>
       </div>
-
       <Footer />
     </>
   );
