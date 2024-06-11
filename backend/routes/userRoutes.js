@@ -14,6 +14,7 @@ import { refreshToken } from "../controllers/RefreshToken.js";
 import verifyToken from "../middleware/VerifyToken.js";
 import uploadPP from "../middleware/multer.js";
 import { getAllDoctors } from "../controllers/doctorController.js";
+import { getAllhewan,UploadHewan} from "../controllers/hewanControler.js";
 
 const router = express.Router();
 
@@ -37,5 +38,7 @@ router.delete("/delete-account", verifyToken, deleteAccount);
 
 // Rute untuk mendapatkan seluruh data dokter
 router.get("/all-doctors", getAllDoctors);
+router.get("/getAllhewan", getAllhewan);
+router.post("/UploadHewan", UploadHewan);
 
 export default router;

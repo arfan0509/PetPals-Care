@@ -1,73 +1,75 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar-after";
 import Footer from "../Components/Footer-after";
+import axios from "../context/axiosConfig";
+import DokterHewan from "../assets/images/DokterHewan.png";
 
-const data = [
-  {
-    id: 1,
-    JenisHewan: "Kucing Anggora",
-    Nama: "Fluffy",
-    Kelamin: "Betina",
-    Usia: "2 Bulan",
-    imageUrl: "https://i.ibb.co.com/ckN3v0F/Angora.png",
-  },
-  {
-    id: 2,
-    JenisHewan: "Iguana Green",
-    Nama: "Greendy",
-    Kelamin: "Jantan",
-    Usia: "9 Bulan",
-    imageUrl: "https://i.ibb.co.com/MnCPpF6/iguana.png",
-  },
-  {
-    id: 3,
-    JenisHewan: "Kelinci Alaska",
-    Nama: "Bunny",
-    Kelamin: "Betina",
-    Usia: "6 Bulan",
-    imageUrl: "https://i.ibb.co.com/WDQmvjH/kelinci.png",
-  },
-  {
-    id: 4,
-    JenisHewan: "Kura-kura Darat",
-    Nama: "Xeca",
-    Kelamin: "Betina",
-    Usia: "5 Tahun",
-    imageUrl: "https://i.ibb.co.com/bFVrLxx/kura.png",
-  },
-  {
-    id: 5,
-    JenisHewan: "Kucing Persia",
-    Nama: "Sassy",
-    Kelamin: "Betina",
-    Usia: "2 Tahun",
-    imageUrl: "https://i.ibb.co.com/K98b2mf/persia.png",
-  },
-  {
-    id: 6,
-    JenisHewan: "Anjing Shiba Inu",
-    Nama: "Cleo",
-    Kelamin: "Betina",
-    Usia: "2 Tahun",
-    imageUrl: "https://i.ibb.co.com/ct4kv3b/shiba.png",
-  },
-  {
-    id: 7,
-    JenisHewan: "Kucing Lokal",
-    Nama: "(Belum Ada)",
-    Kelamin: "Jantan",
-    Usia: "2 Bulan",
-    imageUrl: "https://i.ibb.co.com/c8kJ9x9/lokal.png",
-  },
-  {
-    id: 8,
-    JenisHewan: "Anjing Maltase",
-    Nama: "Fuzzy",
-    Kelamin: "Betina",
-    Usia: "3 Bulan",
-    imageUrl: "https://i.ibb.co.com/wSh5zGx/maltase.png",
-  },
-];
+// const data = [
+//   {
+//     id: 1,
+//     JenisHewan: "Kucing Anggora",
+//     Nama: "Fluffy",
+//     Kelamin: "Betina",
+//     Usia: "2 Bulan",
+//     imageUrl: "https://i.ibb.co.com/ckN3v0F/Angora.png",
+//   },
+//   {
+//     id: 2,
+//     JenisHewan: "Iguana Green",
+//     Nama: "Greendy",
+//     Kelamin: "Jantan",
+//     Usia: "9 Bulan",
+//     imageUrl: "https://i.ibb.co.com/MnCPpF6/iguana.png",
+//   },
+//   {
+//     id: 3,
+//     JenisHewan: "Kelinci Alaska",
+//     Nama: "Bunny",
+//     Kelamin: "Betina",
+//     Usia: "6 Bulan",
+//     imageUrl: "https://i.ibb.co.com/WDQmvjH/kelinci.png",
+//   },
+//   {
+//     id: 4,
+//     JenisHewan: "Kura-kura Darat",
+//     Nama: "Xeca",
+//     Kelamin: "Betina",
+//     Usia: "5 Tahun",
+//     imageUrl: "https://i.ibb.co.com/bFVrLxx/kura.png",
+//   },
+//   {
+//     id: 5,
+//     JenisHewan: "Kucing Persia",
+//     Nama: "Sassy",
+//     Kelamin: "Betina",
+//     Usia: "2 Tahun",
+//     imageUrl: "https://i.ibb.co.com/K98b2mf/persia.png",
+//   },
+//   {
+//     id: 6,
+//     JenisHewan: "Anjing Shiba Inu",
+//     Nama: "Cleo",
+//     Kelamin: "Betina",
+//     Usia: "2 Tahun",
+//     imageUrl: "https://i.ibb.co.com/ct4kv3b/shiba.png",
+//   },
+//   {
+//     id: 7,
+//     JenisHewan: "Kucing Lokal",
+//     Nama: "(Belum Ada)",
+//     Kelamin: "Jantan",
+//     Usia: "2 Bulan",
+//     imageUrl: "https://i.ibb.co.com/c8kJ9x9/lokal.png",
+//   },
+//   {
+//     id: 8,
+//     JenisHewan: "Anjing Maltase",
+//     Nama: "Fuzzy",
+//     Kelamin: "Betina",
+//     Usia: "3 Bulan",
+//     imageUrl: "https://i.ibb.co.com/wSh5zGx/maltase.png",
+//   },
+// ];
 
 const Card = ({ JenisHewan, Nama, Kelamin, Usia, imageUrl }) => {
   return (
@@ -93,13 +95,34 @@ const Card = ({ JenisHewan, Nama, Kelamin, Usia, imageUrl }) => {
   );
 };
 
+
+
+
+
+
 const AdopsiPage = () => {
+
+
+  const [Hewan, setHewan] = useState([]);
+
+  useEffect(() => {
+    const fetchHewan = async () => {
+      try {
+        const response = await axios.get("/users/getAllhewan");
+        setHewan(response.data);
+      } catch (error) {
+        console.error("Failed to fetch doctors:", error);
+      }
+    };
+
+    fetchHewan();
+  }, []);
   return (
     <>
       <Navbar />
       <div className="container px-20 py-8 font-poppins">
         <img
-          src="adopsi.png"
+          src={DokterHewan}
           alt="adopsi"
           className="w-auto h-auto relative mb-8"
         />
@@ -114,14 +137,14 @@ const AdopsiPage = () => {
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
-          {data.map((item) => (
+          {Hewan.map((item) => (
             <Card
               key={item.id}
-              Nama={item.Nama}
-              JenisHewan={item.JenisHewan}
-              Kelamin={item.Kelamin}
-              Usia={item.Usia}
-              imageUrl={item.imageUrl}
+              Nama={item.nama}
+              JenisHewan={item.jenis_hewan}
+              Kelamin={item.gender}
+              Usia={item.usia}
+              imageUrl={item.img_url}
             />
           ))}
         </div>
