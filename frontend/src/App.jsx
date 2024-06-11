@@ -19,6 +19,7 @@ import AdopsiPage from "./pages/AdopsiPage";
 import AboutUsPageAfter from "./pages/AboutUsPageAfter";
 import PetDetailPage from "./pages/PetDetailPage";
 import ProfilDokter from "./pages/ProfilDokter";
+import PostingHewanPage from "./pages/PostingHewanPage";
 
 const PrivateRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("accessToken");
@@ -41,6 +42,7 @@ const App = () => {
         <Route path="/Detail-hewan" element={<PetDetailPage />} />
         <Route path="/Profil-dokter" element={<ProfilDokter />} />
         <Route path="/Daftar-dokter-hewan" element={<DokterHewanPage />} />
+        <Route path="/Posting-hewan" element={<PostingHewanPage />} />
 
         <Route
           path="/Beranda"
@@ -96,6 +98,14 @@ const App = () => {
           element={
             <PrivateRoute>
               <ProfilDokter />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/Posting-hewan"
+          element={
+            <PrivateRoute>
+              <PostingHewanPage />
             </PrivateRoute>
           }
         />
