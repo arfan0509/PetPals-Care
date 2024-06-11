@@ -3,21 +3,34 @@ import jwt from "jsonwebtoken";
 import pool from "../database/Database.js";
 import fs from "fs";
 
-// Fungsi untuk meregistrasi dokter
+// Mendapatkan profil dokter
+export const getDoctorProfile = async (req, res) => {
+  const doctorId = req.user.id; // Mengambil ID dokter dari token akses
+  try {
+    const [rows] = await pool.query(
+      "SELECT id_dokter, nama, no_hp, email, gender, usia, alamat, spesialis, lulusan, biaya, pengalaman,url_foto FROM dokter WHERE id_dokter = ?",
+      [doctorId]
+    );
+    res.status(200).json(rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Registrasi dokter baru
 export const registerDoctor = async (req, res) => {
   const {
     nama,
     no_hp,
-    alamat,
     email,
     password,
     confirmPassword,
     gender,
     usia,
-    lulusan,
+    alamat,
     spesialis,
+    lulusan,
     biaya,
-    pengalaman,
   } = req.body;
 
   if (password !== confirmPassword) {
@@ -34,19 +47,18 @@ export const registerDoctor = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     await pool.query(
-      "INSERT INTO dokter (nama, no_hp, alamat, email, password, gender, usia, lulusan, spesialis, biaya, pengalaman) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO dokter (nama, no_hp, email, password, gender, usia, alamat, spesialis, lulusan, biaya) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
         nama,
         no_hp,
-        alamat,
         email,
         hashedPassword,
         gender,
         usia,
-        lulusan,
+        alamat,
         spesialis,
+        lulusan,
         biaya,
-        pengalaman,
       ]
     );
 
@@ -56,7 +68,7 @@ export const registerDoctor = async (req, res) => {
   }
 };
 
-// Fungsi untuk login dokter
+// Login dokter
 export const loginDoctor = async (req, res) => {
   const { email, password } = req.body;
   try {
@@ -74,12 +86,12 @@ export const loginDoctor = async (req, res) => {
     const accessToken = jwt.sign(
       { id: doctor.id_dokter, email: doctor.email },
       process.env.ACCESS_TOKEN_SECRET,
-      { expiresIn: "15m" }
+      { expiresIn: "60m" }
     );
     const refreshToken = jwt.sign(
       { id: doctor.id_dokter, email: doctor.email },
       process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "1d" }
     );
 
     await pool.query(
@@ -98,7 +110,84 @@ export const loginDoctor = async (req, res) => {
   }
 };
 
-// Fungsi untuk logout dokter
+// Mengupdate profil dokter
+export const updateDoctor = async (req, res) => {
+  const doctorId = req.user.id; // Mengambil ID dokter dari token akses
+  const {
+    nama,
+    no_hp,
+    email,
+    gender,
+    usia,
+    alamat,
+    spesialis,
+    lulusan,
+    biaya,
+    oldPassword,
+    newPassword,
+  } = req.body;
+
+  try {
+    // Periksa apakah ada permintaan untuk mengubah password
+    let passwordQuery = "";
+    const passwordParams = [
+      nama,
+      no_hp,
+      email,
+      gender,
+      usia,
+      alamat,
+      spesialis,
+      lulusan,
+      biaya,
+      doctorId,
+    ];
+    if (oldPassword && newPassword) {
+      // Jika ada permintaan untuk mengubah password, periksa apakah password lama benar
+      const [doctorData] = await pool.query(
+        "SELECT password FROM dokter WHERE id_dokter = ?",
+        [doctorId]
+      );
+      const storedPassword = doctorData[0].password;
+      // Jika password lama tidak cocok, kirim respon 401 Unauthorized
+      if (storedPassword !== oldPassword) {
+        return res.status(401).json({ message: "Password lama salah" });
+      }
+      // Jika password lama benar, tambahkan bagian untuk mengubah password dalam query
+      passwordQuery = ", password = ?";
+      passwordParams.push(newPassword);
+    }
+
+    // Buat query untuk memperbarui data dokter
+    const query = `
+      UPDATE dokter
+      SET nama = ?, no_hp = ?, email = ?, gender = ?, usia = ?, alamat = ?, spesialis = ?, lulusan = ?, biaya = ?${passwordQuery}
+      WHERE id_dokter = ?
+    `;
+
+    // Jalankan query untuk memperbarui data dokter
+    const [result] = await pool.query(query, passwordParams);
+
+    // Jika tidak ada dokter yang terpengaruh (tidak ditemukan), kirim respon 404 Not Found
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ message: "Doctor not found" });
+    }
+
+    // Dapatkan data dokter yang telah diperbarui dari database
+    const [updatedDoctor] = await pool.query(
+      "SELECT id_dokter, nama, no_hp, email, gender, usia, alamat, spesialis, lulusan, biaya FROM dokter WHERE id_dokter = ?",
+      [doctorId]
+    );
+
+    // Kirim data dokter yang telah diperbarui dalam respon
+    res.json(updatedDoctor[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Logout dokter
 export const logoutDoctor = async (req, res) => {
   const { refreshToken } = req.cookies;
   if (!refreshToken) return res.sendStatus(204); // No Content
@@ -123,7 +212,7 @@ export const logoutDoctor = async (req, res) => {
   }
 };
 
-// Fungsi untuk mengunggah foto dokter
+// Mengupdate foto profil dokter
 export const updateDoctorPhoto = async (req, res) => {
   const doctorId = req.user.id; // Mengambil ID dokter dari token akses
   const newFoto = req.file ? req.file.filename : null; // Mendapatkan nama file baru jika ada
@@ -142,16 +231,101 @@ export const updateDoctorPhoto = async (req, res) => {
 
     // Jika dokter sebelumnya memiliki foto profil, hapus file lama dari sistem file
     if (oldFoto) {
-      fs.unlinkSync(`./uploads/pp_dokter/${oldFoto}`);
+      const oldFotoPath = `../uploads/profile/${oldFoto}`;
+      if (fs.existsSync(oldFotoPath)) {
+        fs.unlinkSync(oldFotoPath);
+      }
     }
 
-    // Update database dengan nama file baru
-    await pool.query("UPDATE dokter SET foto = ? WHERE id_dokter = ?", [
-      newFoto,
+    // Update database dengan nama file baru dan URL gambar
+    const photoDir = "/uploads/";
+    const photoUrl = `${req.protocol}://${req.get(
+      "host"
+    )}${photoDir}${newFoto}`;
+
+    await pool.query(
+      "UPDATE dokter SET foto = ?, url_foto = ? WHERE id_dokter = ?",
+      [newFoto, photoUrl, doctorId]
+    );
+
+    // Kirim URL gambar dalam tanggapan
+    res
+      .status(200)
+      .json({ message: "Doctor photo updated successfully", photoUrl });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Fungsi untuk mengubah kata sandi dokter
+export const changeDoctorPassword = async (req, res) => {
+  const doctorId = req.user.id;
+  const { oldPassword, newPassword } = req.body;
+
+  try {
+    const [doctorData] = await pool.query(
+      "SELECT password FROM dokter WHERE id_dokter = ?",
+      [doctorId]
+    );
+    const storedPassword = doctorData[0].password;
+
+    const isPasswordValid = await bcrypt.compare(oldPassword, storedPassword);
+    if (!isPasswordValid) {
+      return res.status(400).json({ message: "Invalid old password" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await pool.query("UPDATE dokter SET password = ? WHERE id_dokter = ?", [
+      hashedPassword,
       doctorId,
     ]);
 
-    res.status(200).json({ message: "Doctor photo updated successfully" });
+    res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Fungsi untuk menghapus foto profil dokter
+export const deleteDoctorPhoto = async (req, res) => {
+  const doctorId = req.user.id;
+
+  try {
+    const [doctorData] = await pool.query(
+      "SELECT foto FROM dokter WHERE id_dokter = ?",
+      [doctorId]
+    );
+    const oldFoto = doctorData[0].foto;
+
+    if (oldFoto) {
+      const oldFotoPath = `../uploads/profile/${oldFoto}`;
+      if (fs.existsSync(oldFotoPath)) {
+        fs.unlinkSync(oldFotoPath);
+      }
+    }
+
+    await pool.query(
+      "UPDATE dokter SET foto = NULL, url_foto = NULL WHERE id_dokter = ?",
+      [doctorId]
+    );
+
+    res.status(200).json({ message: "Doctor photo deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// Fungsi untuk menghapus akun dokter
+export const deleteDoctorAccount = async (req, res) => {
+  const doctorId = req.user.id;
+
+  try {
+    await pool.query("DELETE FROM dokter WHERE id_dokter = ?", [doctorId]);
+    res.clearCookie("refreshToken");
+    res.status(200).json({ message: "Doctor account deleted successfully" });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

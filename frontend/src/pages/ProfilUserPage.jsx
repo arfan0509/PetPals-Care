@@ -128,7 +128,6 @@ const ProfilUserPage = () => {
                   <i className="fas fa-user text-4xl text-[#ED9455]"></i>
                 )}
               </div>
-              ;
               <div>
                 <h1 className="text-xl font-medium">{userData.nama}</h1>
                 <p>Pengasuh Setia</p>
@@ -136,24 +135,24 @@ const ProfilUserPage = () => {
             </div>
             <div className="flex justify-start gap-8 items-center w-full h-auto gap-28 py-4">
               <div>
-                <p>Usia</p>
+                <p className="font-medium">Usia</p>
                 <p>{userData.usia} Tahun</p>
               </div>
               <div>
-                <p>Jenis Kelamin</p>
+                <p className="font-medium">Jenis Kelamin</p>
                 <p>{userData.gender}</p>
               </div>
             </div>
             <div className="py-4">
-              <p>Nomor Handphone</p>
+              <p className="font-medium">Nomor Handphone</p>
               <p>{userData.no_hp}</p>
             </div>
             <div className="py-4">
-              <p>Email</p>
+              <p className="font-medium">Email</p>
               <p>{userData.email}</p>
             </div>
             <div className="py-4">
-              <p>Alamat Lengkap</p>
+              <p className="font-medium">Alamat Lengkap</p>
               <p>{userData.alamat}</p>
             </div>
             <button

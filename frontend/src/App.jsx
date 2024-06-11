@@ -8,6 +8,7 @@ import {
 import LoginPage from "./pages/LoginPage";
 import HomepageAfter from "./pages/HomepageAfter";
 import ProfilUserPage from "./pages/ProfilUserPage";
+import ProfilDokterPage from "./pages/ProfilDokter";
 import HomepageBefore from "./pages/HomepageBefore";
 import RegisterPage from "./pages/RegisterPage";
 import RegisterDokterPage from "./pages/RegisterDokterPage";
@@ -18,6 +19,7 @@ import DokterHewanPage from "./pages/DokterHewanPage";
 import AdopsiPage from "./pages/AdopsiPage";
 import AboutUsPageAfter from "./pages/AboutUsPageAfter";
 import GantiPasswordUser from "./pages/GantiPasswordUser";
+import GantiPasswordDokter from "./pages/GantipasswordDokter";
 
 const PrivateRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("accessToken");
@@ -84,6 +86,24 @@ const App = () => {
           element={
             <PrivateRoute>
               <GantiPasswordUser />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/Profil-dokter"
+          element={
+            <PrivateRoute>
+              <ProfilDokterPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/GantiPassword-dokter"
+          element={
+            <PrivateRoute>
+              <GantiPasswordDokter />
             </PrivateRoute>
           }
         />

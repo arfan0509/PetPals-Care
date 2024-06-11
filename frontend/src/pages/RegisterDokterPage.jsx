@@ -133,7 +133,7 @@ const RegisterDoctorPage = () => {
               </div>
               <div className="py-2">
                 <input
-                  type="text"
+                  type="number"
                   name="no_hp"
                   value={formData.no_hp}
                   onChange={handleChange}
@@ -150,7 +150,7 @@ const RegisterDoctorPage = () => {
                   className="shadow appearance-none border rounded w-full py-2 px-3 bg-[#eee] text-gray-700 leading-tight focus
 focus
 "
-                  placeholder="Alamat Praktek"
+                  placeholder="Alamat Lengkap Praktek/Klinik"
                 />
               </div>
               <div className="py-2">
@@ -217,13 +217,13 @@ focus
                   className="shadow appearance-none border rounded w-full py-2 px-3 bg-[#eee] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 >
                   <option value="">Pilih Gender</option>
-                  <option value="Male">Laki-laki</option>
-                  <option value="Female">Perempuan</option>
+                  <option value="Laki-laki">Laki-laki</option>
+                  <option value="Perempuan">Perempuan</option>
                 </select>
               </div>
               <div className="py-2">
                 <input
-                  type="text"
+                  type="number"
                   name="usia"
                   value={formData.usia}
                   onChange={handleChange}
@@ -238,7 +238,7 @@ focus
                   value={formData.lulusan}
                   onChange={handleChange}
                   className="shadow appearance-none border rounded w-full py-2 px-3 bg-[#eee] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="Lulusan"
+                  placeholder="Lulusan Dari"
                 />
               </div>
               <div className="py-2">
@@ -258,17 +258,17 @@ focus
                   value={formData.biaya}
                   onChange={handleChange}
                   className="shadow appearance-none border rounded w-full py-2 px-3 bg-[#eee] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="Biaya"
+                  placeholder="Biaya Konsultasi Online"
                 />
               </div>
               <div className="py-2">
                 <input
-                  type="text"
+                  type="number"
                   name="pengalaman"
                   value={formData.pengalaman}
                   onChange={handleChange}
                   className="shadow appearance-none border rounded w-full py-2 px-3 bg-[#eee] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="Pengalaman"
+                  placeholder="Berapa tahun pengalaman sebagai dokter hewan?"
                 />
               </div>
               <div className="p-4">
