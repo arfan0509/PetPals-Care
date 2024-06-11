@@ -13,6 +13,7 @@ import {
 import { refreshToken } from "../controllers/RefreshToken.js";
 import verifyToken from "../middleware/VerifyToken.js";
 import uploadPP from "../middleware/multer.js";
+<<<<<<< HEAD
 import {
   getAllDoctors,
   getDoctorById,
