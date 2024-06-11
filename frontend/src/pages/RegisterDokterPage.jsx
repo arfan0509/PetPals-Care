@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import axios from "../context/axiosConfig";
 import Logo from "../assets/images/logo.png";
 import "aos/dist/aos.css";
 import AOS from "aos";
@@ -43,51 +43,18 @@ const RegisterDoctorPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validasi sederhana
-    if (formData.password !== formData.confirmPassword) {
-      setError("Kata sandi dan konfirmasi kata sandi tidak cocok.");
-      return;
-    }
-
-    // Validasi untuk memastikan semua bidang diisi
-    for (const key in formData) {
-      if (formData[key] === "") {
-        setError("Semua bidang harus diisi.");
-        return;
-      }
-    }
-
     try {
-      const response = await axios.post(
-        "http://localhost:5000/api/doctors/register",
-        formData
-      );
+      const response = await axios.post("/doctors/register", formData);
 
       if (response.status === 201) {
-        // Registrasi berhasil, arahkan pengguna ke halaman login
         console.log("Registrasi dokter berhasil");
         window.location.href = "/Login-dokter";
       } else {
-        // Registrasi gagal, tangani kesalahan
         setError("Gagal mendaftar, silakan coba lagi.");
       }
     } catch (error) {
       console.error("Terjadi kesalahan:", error);
-      if (
-        error.response &&
-        error.response.data &&
-        error.response.data.message
-      ) {
-        if (error.response.data.message === "Email already exists") {
-          alert(
-            "Email sudah terdaftar. Silakan gunakan email lain atau masuk ke akun Anda."
-          );
-        } else {
-          setError(error.response.data.message);
-        }
-      } else {
-        setError("Terjadi kesalahan saat melakukan registrasi.");
-      }
+      setError("Terjadi kesalahan saat melakukan registrasi.");
     }
   };
 

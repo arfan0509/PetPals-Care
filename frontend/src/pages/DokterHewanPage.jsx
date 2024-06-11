@@ -1,14 +1,19 @@
-import React from "react";
-import DokterCewe from "../assets/images/DokterCewe.png";
-import DokterCowo from "../assets/images/DokterCowo.png";
-import DokterHewan from "../assets/images/DokterHewan.png";
+import React, { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar-after";
 import Footer from "../Components/Footer-after";
+import axios from "../context/axiosConfig";
+import DokterHewan from "../assets/images/DokterHewan.png";
 
 // Komponen Kartu (Card) yang menerima properti teks
 const Card = ({ image, doctorName, specialty, experience }) => (
   <div className="max-w-sm bg-white rounded-xl shadow-lg overflow-hidden flex flex-col items-center font-poppins">
-    <img className="w-full h-72 object-fill" src={image} alt="Dokter" />
+    {image ? (
+      <img className="w-full h-60 object-cover" src={image} alt="Dokter" />
+    ) : (
+      <div className="w-full h-60 flex justify-center items-center">
+        <i className="fas fa-user-doctor text-9xl text-[#ED9455]"></i>
+      </div>
+    )}
     <div className="p-4 flex flex-col items-start w-full">
       <h2 className="text-xl font-semibold text-slate-900 line-clamp-1">
         {doctorName}
@@ -27,80 +32,20 @@ const Card = ({ image, doctorName, specialty, experience }) => (
 );
 
 const DokterHewanPage = () => {
-  const cardsData = [
-    {
-      image: DokterCowo,
-      doctorName: "Drh. Muhammad Ali",
-      specialty: "Hewan Domestik dan Eksotik",
-      experience: "7 Tahun",
-    },
-    {
-      image: DokterCewe,
-      doctorName: "Drh. Zahra Salsabila",
-      specialty: "Kucing dan Anjing",
-      experience: "7 Tahun",
-    },
-    {
-      image: DokterCowo,
-      doctorName: "Drh. Septian Priatama",
-      specialty: "Hewan Ternak dan Unggas",
-      experience: "7 Tahun",
-    },
-    {
-      image: DokterCewe,
-      doctorName: "Drh. Ami Kosriami",
-      specialty: "Anjing dan Kucing, Ternak",
-      experience: "7 Tahun",
-    },
-    {
-      image: DokterCowo,
-      doctorName: "Drh. Arjuna Wijaya",
-      specialty: "Hewan Domestik dan Eksotik",
-      experience: "10 Tahun",
-    },
-    {
-      image: DokterCewe,
-      doctorName: "Drh. Silvia Candra",
-      specialty: "Kucing dan Anjing",
-      experience: "5 Tahun",
-    },
-    {
-      image: DokterCowo,
-      doctorName: "Drh. Dimas Pratama",
-      specialty: "Hewan Ternak dan Unggas",
-      experience: "10 Tahun",
-    },
-    {
-      image: DokterCewe,
-      doctorName: "Drh. Diyah Pitaloka",
-      specialty: "Anjing dan Kucing, Ternak",
-      experience: "7 Tahun",
-    },
-    {
-      image: DokterCowo,
-      doctorName: "H.M.A.Cholik",
-      specialty: "Hewan Domestik dan Eksotik",
-      experience: "7 Tahun",
-    },
-    {
-      image: DokterCewe,
-      doctorName: "Drh. Anindita Ika A",
-      specialty: "Kucing dan Anjing",
-      experience: "5 Tahun",
-    },
-    {
-      image: DokterCowo,
-      doctorName: "Drh. Cokro Susmito",
-      specialty: "Hewan Ternak dan Unggas",
-      experience: "7 Tahun",
-    },
-    {
-      image: DokterCewe,
-      doctorName: "Drh. Yana Rosa",
-      specialty: "Anjing dan Kucing, Ternak",
-      experience: "7 Tahun",
-    },
-  ];
+  const [doctors, setDoctors] = useState([]);
+
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const response = await axios.get("/users/all-doctors");
+        setDoctors(response.data);
+      } catch (error) {
+        console.error("Failed to fetch doctors:", error);
+      }
+    };
+
+    fetchDoctors();
+  }, []);
 
   return (
     <>
@@ -122,18 +67,20 @@ const DokterHewanPage = () => {
         </div>
       </div>
       <div className="w-full h-auto pt-8 px-20 container">
-        <div>
-          {[...Array(3)].map((_, sectionIndex) => (
-            <div key={sectionIndex} className="py-8 flex gap-4">
-              {cardsData
-                .slice(sectionIndex * 4, sectionIndex * 4 + 4)
-                .map((card, index) => (
-                  <Card key={index} {...card} />
-                ))}
+        <div className="flex flex-wrap -mx-4">
+          {doctors.map((doctor, index) => (
+            <div key={index} className="w-full md:w-1/2 lg:w-1/4 px-4 mb-8">
+              <Card
+                image={doctor.url_foto}
+                doctorName={doctor.nama}
+                specialty={doctor.spesialis}
+                experience={doctor.pengalaman}
+              />
             </div>
           ))}
         </div>
       </div>
+
       <Footer />
     </>
   );
