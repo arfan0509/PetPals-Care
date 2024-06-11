@@ -90,22 +90,20 @@ const ProfilUserPage = () => {
       <div className="bg-white-light-2 w-full h-auto flex justify-start font-poppins">
         <div className="w-1/3 h-screen p-8">
           <ul>
-            <li className="p-2 hover:bg-gray-400 border-collapse rounded-lg">
+            <li className="p-2 hover:bg-[#DE9455] hover:text-white border-collapse rounded-lg transition duration-200">
               <a href="/Profil">Profil Saya</a>
             </li>
-            <li className="p-2 hover:bg-gray-400 border-collapse rounded-lg">
-              <a href="#">Daftar Alamat</a>
+            <li className="p-2 hover:bg-[#DE9455] hover:text-white border-collapse rounded-lg transition duration-200">
+              <a href="/GantiPassword-user">Ubah Kata Sandi</a>
             </li>
-            <li className="p-2 hover:bg-gray-400 border-collapse rounded-lg">
-              <a href="#">Favorit</a>
-            </li>
-            <li className="p-2 hover:bg-gray-400 border-collapse rounded-lg">
+            <li className="p-2 hover:bg-[#DE9455] hover:text-white border-collapse rounded-lg transition duration-200">
               <a href="#">Pesan</a>
             </li>
-            <li className="p-2 hover:bg-gray-400 border-collapse rounded-lg">
+            <li className="p-2 hover:bg-[#DE9455] hover:text-white border-collapse rounded-lg transition duration-200">
               <a href="/Posting-hewan">Posting Hewan Saya</a>
             </li>
-            <li className="py-8 px-2">
+            <div className="py-4"></div>
+            <li className="p-2 hover:bg-red-500 hover:text-white border-collapse rounded-lg transition duration-200">
               <button onClick={logoutUser}>Keluar</button>
             </li>
           </ul>
