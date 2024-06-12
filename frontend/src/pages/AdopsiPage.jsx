@@ -95,20 +95,13 @@ const Card = ({ JenisHewan, Nama, Kelamin, Usia, imageUrl }) => {
   );
 };
 
-
-
-
-
-
 const AdopsiPage = () => {
-
-
   const [Hewan, setHewan] = useState([]);
 
   useEffect(() => {
     const fetchHewan = async () => {
       try {
-        const response = await axios.get("/users/getAllhewan");
+        const response = await axios.get("/hewan/");
         setHewan(response.data);
       } catch (error) {
         console.error("Failed to fetch doctors:", error);
@@ -144,7 +137,7 @@ const AdopsiPage = () => {
               JenisHewan={item.jenis_hewan}
               Kelamin={item.gender}
               Usia={item.usia}
-              imageUrl={item.img_url}
+              imageUrl={item.url_fotoutama}
             />
           ))}
         </div>

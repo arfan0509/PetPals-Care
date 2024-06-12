@@ -1,6 +1,57 @@
 import pool from "../database/Database.js";
 import fs from "fs";
 
+// Fungsi untuk mendapatkan hewan dengan informasi pengguna dan foto_hewan
+export const getHewanWithUser = async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT h.id_hewan, h.nama AS nama, h.jenis_hewan, h.gender, h.usia, h.warna, h.lokasi, h.tgl_publish, h.deskripsi, h.foto_utama, h.url_fotoutama,
+             u.nama AS user_nama, u.alamat AS user_lokasi, u.no_hp AS user_no_hp,
+             fh.id_foto, fh.foto AS foto_hewan, fh.url_foto
+      FROM hewan h
+      JOIN users u ON h.users_id_user = u.id_user
+      LEFT JOIN foto_hewan fh ON h.id_hewan = fh.hewan_id_hewan
+    `);
+    // Group rows by hewan_id to combine multiple photos of the same hewan
+    const groupedRows = {};
+    rows.forEach((row) => {
+      if (!groupedRows[row.id_hewan]) {
+        // Initialize hewan data
+        groupedRows[row.id_hewan] = {
+          id_hewan: row.id_hewan,
+          nama: row.nama,
+          jenis_hewan: row.jenis_hewan,
+          gender: row.gender,
+          usia: row.usia,
+          warna: row.warna,
+          lokasi: row.lokasi,
+          tgl_publish: row.tgl_publish,
+          deskripsi: row.deskripsi,
+          foto_utama: row.foto_utama,
+          url_fotoutama: row.url_fotoutama,
+          user_nama: row.user_nama,
+          user_lokasi: row.user_lokasi,
+          user_no_hp: row.user_no_hp,
+          foto_hewan: [],
+        };
+      }
+      // Add photo data if exists
+      if (row.id_foto) {
+        groupedRows[row.id_hewan].foto_hewan.push({
+          id_foto: row.id_foto,
+          foto_hewan: row.foto_hewan,
+          url_foto: row.url_foto,
+        });
+      }
+    });
+    // Convert groupedRows object to array
+    const hewanWithPhotos = Object.values(groupedRows);
+    res.status(200).json(hewanWithPhotos);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // Fungsi untuk mengupload hewan dan foto
 export const uploadHewan = async (req, res) => {
   const {
@@ -67,57 +118,6 @@ export const uploadHewan = async (req, res) => {
     }
     console.error(error);
     res.status(500).json({ message: "Server error" });
-  }
-};
-
-// Fungsi untuk mendapatkan hewan dengan informasi pengguna dan foto_hewan
-export const getHewanWithUser = async (req, res) => {
-  try {
-    const [rows] = await pool.query(`
-      SELECT h.id_hewan, h.nama AS hewan_nama, h.jenis_hewan, h.gender, h.usia, h.warna, h.lokasi, h.tgl_publish, h.deskripsi, h.foto_utama, h.url_fotoutama,
-             u.nama AS user_nama, u.alamat AS user_lokasi, u.no_hp AS user_no_hp,
-             fh.id_foto, fh.foto AS foto_hewan, fh.url_foto
-      FROM hewan h
-      JOIN users u ON h.users_id_user = u.id_user
-      LEFT JOIN foto_hewan fh ON h.id_hewan = fh.hewan_id_hewan
-    `);
-    // Group rows by hewan_id to combine multiple photos of the same hewan
-    const groupedRows = {};
-    rows.forEach((row) => {
-      if (!groupedRows[row.id_hewan]) {
-        // Initialize hewan data
-        groupedRows[row.id_hewan] = {
-          id_hewan: row.id_hewan,
-          hewan_nama: row.hewan_nama,
-          jenis_hewan: row.jenis_hewan,
-          gender: row.gender,
-          usia: row.usia,
-          warna: row.warna,
-          lokasi: row.lokasi,
-          tgl_publish: row.tgl_publish,
-          deskripsi: row.deskripsi,
-          foto_utama: row.foto_utama,
-          url_fotoutama: row.url_fotoutama,
-          user_nama: row.user_nama,
-          user_lokasi: row.user_lokasi,
-          user_no_hp: row.user_no_hp,
-          foto_hewan: [],
-        };
-      }
-      // Add photo data if exists
-      if (row.id_foto) {
-        groupedRows[row.id_hewan].foto_hewan.push({
-          id_foto: row.id_foto,
-          foto_hewan: row.foto_hewan,
-          url_foto: row.url_foto,
-        });
-      }
-    });
-    // Convert groupedRows object to array
-    const hewanWithPhotos = Object.values(groupedRows);
-    res.status(200).json(hewanWithPhotos);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
   }
 };
 
