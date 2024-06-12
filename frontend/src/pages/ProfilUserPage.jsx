@@ -100,7 +100,7 @@ const ProfilUserPage = () => {
               <a href="#">Pesan</a>
             </li>
             <li className="p-2 hover:bg-[#DE9455] hover:text-white border-collapse rounded-lg transition duration-200">
-              <a href="/PopUpPosting">Posting Hewan Saya</a>
+              <a href="/PostingHewan">Posting Hewan Saya</a>
             </li>
             <div className="py-4"></div>
             <li className="p-2 hover:bg-red-500 hover:text-white border-collapse rounded-lg transition duration-200">

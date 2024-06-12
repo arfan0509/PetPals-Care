@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar-after";
 import Footer from "../Components/Footer-after";
 import axios from "../context/axiosConfig";
-import DokterHewan from "../assets/images/DokterHewan.png";
+import AdopsiBanner from "../assets/images/adopsi.png";
 
 // const data = [
 //   {
@@ -115,7 +115,7 @@ const AdopsiPage = () => {
       <Navbar />
       <div className="container px-20 py-8 font-poppins">
         <img
-          src={DokterHewan}
+          src={AdopsiBanner}
           alt="adopsi"
           className="w-auto h-auto relative mb-8"
         />

@@ -20,7 +20,7 @@ import AdopsiPage from "./pages/AdopsiPage";
 import AboutUsPageAfter from "./pages/AboutUsPageAfter";
 import GantiPasswordUser from "./pages/GantiPasswordUser";
 import GantiPasswordDokter from "./pages/GantipasswordDokter";
-import PopUpPosting from "./pages/PopUpPosting";
+import PostingHewanPage from "./pages/PostingHewanPage";
 import DetailDokter from "./pages/DetailDokter";
 
 const PrivateRoute = ({ children }) => {
@@ -41,7 +41,6 @@ const App = () => {
         <Route path="/Verifikasi" element={<VerifikasiPage />} />
         <Route path="/Login-Dokter" element={<LoginDokterPage />} />
         <Route path="/Tentang-kami" element={<AboutUsPageBefore />} />
-        <Route path="/PopUpPosting" element={<PopUpPosting />} />
 
         <Route
           path="/Beranda"
@@ -111,10 +110,10 @@ const App = () => {
           }
         />
         <Route
-          path="/PopUpPosting"
+          path="/PostingHewan"
           element={
             <PrivateRoute>
-              <PopUpPosting />
+              <PostingHewanPage />
             </PrivateRoute>
           }
         />

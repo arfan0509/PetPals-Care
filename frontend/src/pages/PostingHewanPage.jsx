@@ -1,72 +1,117 @@
+import React, { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar-after";
-import Footer from '../Components/Footer-after';
-import logo from "../assets/images/logo.png";
+import Footer from "../Components/Footer-after";
+import axios from "../context/axiosConfig";
+import PostingHewanModal from "../Components/PostingHewanModal";
 
-const data = [
-  { id: 1, name: 'Kucing Lokal', description: 'Nama : Luo Yen', imageUrl: 'https://i.ibb.co.com/QdPkcz4/ucing.png' },
-  { id: 2, name: 'Anjing Mini', description: 'Nama : Shiro', imageUrl: 'https://i.ibb.co.com/cFrGGyw/persia.png' },
-  { id: 3, name: 'Kucing Lokal', description: 'Tinny', imageUrl: 'https://i.ibb.co.com/J3fMxC4/kucing-lokalan.png' },
-  { id: 3, name: 'Kucing Lokal', description: 'Tinny', imageUrl: 'https://i.ibb.co.com/J3fMxC4/kucing-lokalan.png' },
-  { id: 3, name: 'Kucing Lokal', description: 'Tinny', imageUrl: 'https://i.ibb.co.com/J3fMxC4/kucing-lokalan.png' },
-  { id: 3, name: 'Kucing Lokal', description: 'Tinny', imageUrl: 'https://i.ibb.co.com/J3fMxC4/kucing-lokalan.png' },
-  { id: 3, name: 'Kucing Lokal', description: 'Tinny', imageUrl: 'https://i.ibb.co.com/J3fMxC4/kucing-lokalan.png' },
-  { id: 3, name: 'Kucing Lokal', description: 'Tinny', imageUrl: 'https://i.ibb.co.com/J3fMxC4/kucing-lokalan.png' },
-  { id: 3, name: 'Kucing Lokal', description: 'Tinny', imageUrl: 'https://i.ibb.co.com/J3fMxC4/kucing-lokalan.png' },
-  { id: 3, name: 'Kucing Lokal', description: 'Tinny', imageUrl: 'https://i.ibb.co.com/J3fMxC4/kucing-lokalan.png' },
-  { id: 3, name: 'Kucing Lokal', description: 'Tinny', imageUrl: 'https://i.ibb.co.com/J3fMxC4/kucing-lokalan.png' },
-  { id: 3, name: 'Kucing Lokal', description: 'Tinny', imageUrl: 'https://i.ibb.co.com/J3fMxC4/kucing-lokalan.png' },
-  { id: 3, name: 'Kucing Lokal', description: 'Tinny', imageUrl: 'https://i.ibb.co.com/J3fMxC4/kucing-lokalan.png' },
-
-];
-
-// Komponen Card
-const Card = ({ name, description, imageUrl }) => {
-  return (
-    <div className="p-4 bg-white border rounded shadow ">
-      <img src={imageUrl} alt={name} className="w-full h-48 object-cover rounded-t" />
-      <div className="p-4">
-        <h2 className="text-lg font-bold mb-2">{name}</h2>
-        <p className="text-gray-700">{description}</p>
-      </div>
-    </div>
-  );
+const logoutUser = async () => {
+  try {
+    await axios.delete("/users/logout");
+    localStorage.removeItem("accessToken");
+    localStorage.removeItem("refreshToken");
+    window.location.href = "/";
+  } catch (error) {
+    console.error("Failed to logout:", error);
+    // Tindakan penanganan kesalahan jika diperlukan
+  }
 };
+
 const PostingHewanPage = () => {
+  const [data, setData] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false); // State untuk mengontrol visibilitas modal upload hewan
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/posting-hewan");
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleDeletePosting = async (id) => {
+    try {
+      await axios.delete(`/posting-hewan/${id}`);
+      setData(data.filter((item) => item.id !== id));
+    } catch (error) {
+      console.error("Error deleting posting:", error);
+    }
+  };
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <>
       <Navbar />
-      <div className=" flex justify-center items-start  ">
-
+      <div className="bg-white-light-2 w-full h-auto flex justify-start font-poppins">
         <div className="w-1/3 h-screen p-8">
           <ul>
-            <li className="p-2  hover:bg-gray-400 border-collapse rounded-lg"><a href="/Profil">Profil Saya</a></li>
-            <li className="p-2  hover:bg-gray-400 border-collapse rounded-lg"><a href="#">Daftar Alamat</a></li>
-            <li className="p-2  hover:bg-gray-400 border-collapse rounded-lg"><a href="#">Favorit</a></li>
-            <li className="p-2  hover:bg-gray-400 border-collapse rounded-lg"><a href="#">Pesan</a></li>
-            <li className="p-2  hover:bg-gray-400 border-collapse rounded-lg"><a href="#">Posting Hewan Saya</a></li>
-            <li className="py-8 px-2"> <a href="http://localhost:5173/"> Keluar</a></li>
+            <li className="p-2 hover:bg-[#DE9455] hover:text-white border-collapse rounded-lg transition duration-200">
+              <a href="/Profil">Profil Saya</a>
+            </li>
+            <li className="p-2 hover:bg-[#DE9455] hover:text-white border-collapse rounded-lg transition duration-200">
+              <a href="/GantiPassword-user">Ubah Kata Sandi</a>
+            </li>
+            <li className="p-2 hover:bg-[#DE9455] hover:text-white border-collapse rounded-lg transition duration-200">
+              <a href="#">Pesan</a>
+            </li>
+            <li className="p-2 hover:bg-[#DE9455] hover:text-white border-collapse rounded-lg transition duration-200">
+              <a href="/PostingHewan">Posting Hewan Saya</a>
+            </li>
+            <div className="py-4"></div>
+            <li className="p-2 hover:bg-red-500 hover:text-white border-collapse rounded-lg transition duration-200">
+              <button onClick={logoutUser}>Keluar</button>
+            </li>
           </ul>
         </div>
-        <div className=" w-full h-auto p-12">
-          <div className="bg-white p-4 rounded-xl w-full h-full shadow-2xl">
-            <h1 className="p-4"> Postingan Hewan Saya </h1>
-            <div className="px-4 py-2 ">
-              <button className=" text-white  py-2 px-4 rounded-md bg-[#DE9455] hover:bg-[#D68B4B]"> <a href="/Upload-hewan"> + Posting Hewan</a></button>
+        {/* Konten */}
+        <div className="w-full h-auto p-4">
+          <div className="bg-white p-0 rounded-xl w-full h-full shadow-2xl">
+            <h1 className="p-4 text-2xl font-bold">Postingan Hewan Saya</h1>
+            <div className="px-4 py-2">
+              <button
+                onClick={handleOpenModal} // Tambahkan event handler untuk membuka modal
+                className="text-white py-2 px-4 rounded-md bg-[#DE9455] hover:bg-[#D68B4B]"
+              >
+                + Posting Hewan
+              </button>
             </div>
+
             {/* Grid */}
             <div className="container mx-auto p-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 h-auto w-auto">
                 {data.map((item) => (
-                  <Card key={item.id} name={item.name} description={item.description} imageUrl={item.imageUrl} />
+                  <Card
+                    key={item.id}
+                    id={item.id}
+                    Nama={item.Nama}
+                    JenisHewan={item.JenisHewan}
+                    Kelamin={item.Kelamin}
+                    Usia={item.Usia}
+                    imageUrl={item.imageUrl}
+                    onDelete={handleDeletePosting}
+                  />
                 ))}
               </div>
             </div>
           </div>
         </div>
       </div>
-      <Footer />
-    </>
-  )
-}
 
-export default PostingHewanPage
+      {/* Modal upload hewan */}
+      {isModalOpen && <PostingHewanModal onClose={handleCloseModal} />}
+    </>
+  );
+};
+
+export default PostingHewanPage;
