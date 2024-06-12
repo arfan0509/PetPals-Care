@@ -17,8 +17,6 @@ import {
   getAllDoctors,
   getDoctorById,
 } from "../controllers/doctorController.js";
-import { getAllDoctors } from "../controllers/doctorController.js";
-import { getAllhewan, UploadHewan } from "../controllers/hewanControler.js";
 
 const router = express.Router();
 
@@ -44,7 +42,5 @@ router.delete("/delete-account", verifyToken, deleteAccount);
 router.get("/all-doctors", getAllDoctors);
 // Rute untuk mendapatkan detail dokter berdasarkan id_dokter
 router.get("/doctor/:id", getDoctorById);
-router.get("/getAllhewan", getAllhewan);
-router.post("/UploadHewan", UploadHewan);
 
 export default router;

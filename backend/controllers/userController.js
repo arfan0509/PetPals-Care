@@ -197,7 +197,7 @@ export const updateUserPhoto = async (req, res) => {
     }
 
     // Update database dengan nama file baru dan URL gambar
-    const photoDir = "/uploads/";
+    const photoDir = "/uploads/profile/";
     const photoUrl = `${req.protocol}://${req.get(
       "host"
     )}${photoDir}${newFoto}`;

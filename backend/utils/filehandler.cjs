@@ -1,5 +1,6 @@
 const path = require("path");
 
-const fileDir = () => path.join(__dirname, "../../uploads/profile");
+const fileDir = (directory) =>
+  path.join(__dirname, `../../uploads/${directory}`);
 
 module.exports = { fileDir };
