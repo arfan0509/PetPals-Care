@@ -10,14 +10,12 @@ const storageFotoUtama = multer.diskStorage({
     cb(null, path.join(__dirname, "../../uploads/hewan"));
   },
   filename: function (req, file, cb) {
-    const hewanId = req.params.hewanId; // Mendapatkan ID hewan dari parameter URL
     const filenameWithoutExt = path
       .parse(file.originalname)
       .name.replace(/\s+/g, "-"); // Mengganti semua spasi dengan tanda hubung
     cb(
       null,
-      hewanId +
-        "-" +
+      "main-" +
         filenameWithoutExt +
         "-" +
         Date.now() +

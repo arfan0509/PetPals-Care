@@ -15,7 +15,11 @@ const storage = multer.diskStorage({
       .name.replace(/\s+/g, "-"); // Mengganti semua spasi dengan tanda hubung
     cb(
       null,
-      filenameWithoutExt + "-" + Date.now() + path.extname(file.originalname)
+      "foto-" +
+        filenameWithoutExt +
+        "-" +
+        Date.now() +
+        path.extname(file.originalname)
     );
   },
 });
