@@ -75,7 +75,7 @@ const PostingHewanPage = () => {
           </ul>
         </div>
         {/* Konten */}
-        <div className="w-full h-auto p-4">
+        <div className="w-full h-auto p-12">
           <div className="bg-white p-0 rounded-xl w-full h-full shadow-2xl">
             <h1 className="p-4 text-2xl font-bold">Postingan Hewan Saya</h1>
             <div className="px-4 py-2">

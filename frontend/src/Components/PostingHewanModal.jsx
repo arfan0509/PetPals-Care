@@ -9,7 +9,7 @@ const PostingHewanModal = ({ onClose }) => {
     usia: "",
     warna: "",
     lokasi: "",
-    tgl_publish: "",
+    tgl_publish: new Date().toISOString().slice(0, 10), // Tanggal hari ini
     deskripsi: "",
     file: null,
   });
@@ -36,39 +36,33 @@ const PostingHewanModal = ({ onClose }) => {
       for (const key in formData) {
         formDataObj.append(key, formData[key]);
       }
-      const response = await axios.post("/uploadHewan", formDataObj, {
+      const accessToken = localStorage.getItem("accessToken");
+      const response = await axios.post("/hewan/uploadHewan", formDataObj, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${accessToken}`,
         },
       });
       console.log(response.data);
       onClose();
+      window.location.reload(); // Example of refreshing page after successful upload
     } catch (error) {
       console.error("Error uploading hewan:", error);
     }
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-50">
+    <div className="font-poppins fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-50">
       <div className="bg-white p-6 rounded-lg h-4/5 overflow-y-auto w-2/3">
         <h2 className="text-2xl font-bold mb-4">Posting Hewan</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
-            <label htmlFor="nama" className="block font-semibold mb-1">
-              Nama
+            <label className="block text-gray-700">
+              Nama Panggilan{" "}
+              <div className="text-xs opacity-60 mb-1 ">
+                (Kosongkan jika tidak ada)
+              </div>
             </label>
-            <input
-              type="text"
-              id="nama"
-              name="nama"
-              value={formData.nama}
-              onChange={handleChange}
-              required
-              className="w-full px-4 py-2 border rounded-lg"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Nama</label>
             <input
               type="text"
               name="nama"
@@ -77,7 +71,93 @@ const PostingHewanModal = ({ onClose }) => {
               className="w-full p-2 border border-gray-300 rounded"
             />
           </div>
-          {/* Tambahkan input untuk semua field yang diperlukan */}
+          <div className="mb-4">
+            <label className="block text-gray-700">
+              Jenis Hewan{" "}
+              <div className="text-xs opacity-60 mb-1 ">
+                (contoh: Kucing Lokal)
+              </div>
+            </label>
+            <input
+              type="text"
+              name="jenis_hewan"
+              value={formData.jenis_hewan}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Jenis Kelamin</label>
+            <select
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            >
+              <option value=""></option>
+              <option value="Jantan">Jantan</option>
+              <option value="Betina">Betina</option>
+            </select>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">
+              Usia{" "}
+              <div className="text-xs opacity-60 mb-1 ">
+                (dalam satuan bulan)
+              </div>
+            </label>
+            <input
+              type="number"
+              name="usia"
+              value={formData.usia}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">
+              Warna{" "}
+              <div className="text-xs opacity-60 mb-1">(contoh: Putih)</div>
+            </label>
+            <input
+              type="text"
+              name="warna"
+              value={formData.warna}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">
+              Lokasi{" "}
+              <div className="text-xs opacity-60 mb-1 ">
+                (masukkan alamat lengkap)
+              </div>
+            </label>
+            <input
+              type="text"
+              name="lokasi"
+              value={formData.lokasi}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">
+              Deskripsi Tambahan{" "}
+              <div className="text-xs opacity-60 mb-1">
+                (masukkan deskripsi tambahan)
+              </div>
+            </label>
+            <textarea
+              name="deskripsi"
+              value={formData.deskripsi}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded"
+              rows="3"
+            />
+          </div>
+          {/* Sisipkan input lainnya sesuai kebutuhan */}
           <div className="mb-4">
             <label htmlFor="file" className="block font-semibold mb-1">
               Foto Utama
