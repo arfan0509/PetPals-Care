@@ -1,29 +1,57 @@
 import React, { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar-after";
-import Footer from "../Components/Footer-after";
-import axios from "../context/axiosConfig";
+import axiosInstance from "../context/axiosConfig";
 import PostingHewanModal from "../Components/PostingHewanModal";
 
 const logoutUser = async () => {
   try {
-    await axios.delete("/users/logout");
+    await axiosInstance.delete("/users/logout");
     localStorage.removeItem("accessToken");
     localStorage.removeItem("refreshToken");
     window.location.href = "/";
   } catch (error) {
     console.error("Failed to logout:", error);
-    // Tindakan penanganan kesalahan jika diperlukan
   }
+};
+
+const Card = ({ id, JenisHewan, Nama, Kelamin, Usia, imageUrl, onDelete }) => {
+  return (
+    <div className="max-w-xs mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
+      <img className="w-full h-48 object-cover" src={imageUrl} alt={Nama} />
+      <div className="px-6 py-4">
+        <div className="font-bold text-lg mb-2">
+          <h1>{JenisHewan}</h1>
+        </div>
+        <div className="text-sm">
+          <p className="text-[#667479]">Nama: {Nama}</p>
+          <div className="text-sm flex justify-between">
+            <p className="text-[#667479]">
+              Kelamin: <span style={{ marginRight: "5px" }}>{Kelamin}</span>
+            </p>
+            <p className="text-[#667479]">Usia: {Usia}</p>
+          </div>
+        </div>
+        <div className="mt-4">
+          <button
+            onClick={() => onDelete(id)} // Ensure the correct ID is passed
+            className="w-full py-2 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300"
+          >
+            Hapus
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 const PostingHewanPage = () => {
   const [data, setData] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false); // State untuk mengontrol visibilitas modal upload hewan
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/posting-hewan");
+        const response = await axiosInstance.get("/hewan");
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -34,8 +62,9 @@ const PostingHewanPage = () => {
   }, []);
 
   const handleDeletePosting = async (id) => {
+    console.log("Deleting post with id:", id); // Debug log
     try {
-      await axios.delete(`/posting-hewan/${id}`);
+      await axiosInstance.delete(`/hewan/${id}`);
       setData(data.filter((item) => item.id !== id));
     } catch (error) {
       console.error("Error deleting posting:", error);
@@ -74,32 +103,30 @@ const PostingHewanPage = () => {
             </li>
           </ul>
         </div>
-        {/* Konten */}
         <div className="w-full h-auto p-12">
           <div className="bg-white p-0 rounded-xl w-full h-full shadow-2xl">
             <h1 className="p-4 text-2xl font-bold">Postingan Hewan Saya</h1>
             <div className="px-4 py-2">
               <button
-                onClick={handleOpenModal} // Tambahkan event handler untuk membuka modal
+                onClick={handleOpenModal}
                 className="text-white py-2 px-4 rounded-md bg-[#DE9455] hover:bg-[#D68B4B]"
               >
                 + Posting Hewan
               </button>
             </div>
 
-            {/* Grid */}
             <div className="container mx-auto p-4">
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 h-auto w-auto">
                 {data.map((item) => (
                   <Card
                     key={item.id}
                     id={item.id}
-                    Nama={item.Nama}
-                    JenisHewan={item.JenisHewan}
-                    Kelamin={item.Kelamin}
-                    Usia={item.Usia}
-                    imageUrl={item.imageUrl}
-                    onDelete={handleDeletePosting}
+                    Nama={item.nama}
+                    JenisHewan={item.jenisHewan}
+                    Kelamin={item.kelamin}
+                    Usia={item.usia}
+                    imageUrl={item.url_fotoutama}
+                    onDelete={handleDeletePosting} // Pass the delete function
                   />
                 ))}
               </div>
@@ -108,7 +135,6 @@ const PostingHewanPage = () => {
         </div>
       </div>
 
-      {/* Modal upload hewan */}
       {isModalOpen && <PostingHewanModal onClose={handleCloseModal} />}
     </>
   );
