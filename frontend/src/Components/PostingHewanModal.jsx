@@ -11,8 +11,10 @@ const PostingHewanModal = ({ onClose }) => {
     lokasi: "",
     tgl_publish: new Date().toISOString().slice(0, 10),
     deskripsi: "",
-    main_photo: null, // Sesuaikan nama properti dengan yang diharapkan backend
+    main_photo: null,
   });
+
+  const [preview, setPreview] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -23,16 +25,33 @@ const PostingHewanModal = ({ onClose }) => {
   };
 
   const handleFileChange = (e) => {
+    const file = e.target.files[0];
     setFormData((prevData) => ({
       ...prevData,
-      main_photo: e.target.files[0], // Ganti dari "file" ke "main_photo"
+      main_photo: file,
     }));
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result); // Menampilkan preview gambar
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setPreview(null);
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const formDataObj = new FormData();
+
+      // Check if the 'nama' field is empty and set default value
+      if (!formData.nama) {
+        formData.nama = "(Belum memiliki nama)";
+      }
+
       for (const key in formData) {
         formDataObj.append(key, formData[key]);
       }
@@ -172,9 +191,18 @@ const PostingHewanModal = ({ onClose }) => {
               className="w-full px-4 py-2 border rounded-lg"
             />
           </div>
+          {preview && (
+            <div className="mb-4">
+              <img
+                src={preview}
+                alt="Preview"
+                className="w-full h-auto rounded-lg"
+              />
+            </div>
+          )}
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-[#DE9455] text-white rounded-lg hover:bg-[#f89b59] transition duration-300"
+            className="w-full py-2 px-4 bg-[#DE9455] text-white rounded-lg hover:bg[#f89b59] transition duration-300 mt-4"
           >
             Upload
           </button>

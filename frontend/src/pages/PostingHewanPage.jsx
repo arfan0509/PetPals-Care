@@ -14,27 +14,32 @@ const logoutUser = async () => {
   }
 };
 
-const Card = ({ id, JenisHewan, Nama, Kelamin, Usia, imageUrl, onDelete }) => {
+const Card = ({
+  id_hewan,
+  JenisHewan,
+  Nama,
+  Kelamin,
+  Usia,
+  imageUrl,
+  onDelete,
+}) => {
   return (
-    <div className="max-w-xs mx-auto bg-white rounded-xl shadow-lg overflow-hidden">
-      <img className="w-full h-48 object-cover" src={imageUrl} alt={Nama} />
+    <div className="max-w-xs mx-1 bg-white rounded-xl shadow-lg overflow-hidden">
+      <img className="w-full h-52 object-cover" src={imageUrl} alt={Nama} />
       <div className="px-6 py-4">
-        <div className="font-bold text-lg mb-2">
+        <div className="font-bold text-xl mb-2 line-clamp-1">
           <h1>{JenisHewan}</h1>
         </div>
-        <div className="text-sm">
-          <p className="text-[#667479]">Nama: {Nama}</p>
-          <div className="text-sm flex justify-between">
-            <p className="text-[#667479]">
-              Kelamin: <span style={{ marginRight: "5px" }}>{Kelamin}</span>
-            </p>
-            <p className="text-[#667479]">Usia: {Usia}</p>
-          </div>
+        <p className="text-[#667479] text-sm line-clamp-1">Nama: {Nama}</p>
+        <div className="flex gap-2 items-center">
+          <p className="text-[#667479] text-sm">Kelamin: {Kelamin}</p>
+          <span className="text-[#667479] text-sm">&bull;</span>
+          <p className="text-[#667479] text-sm">Usia: {Usia}</p>
         </div>
         <div className="mt-4">
           <button
-            onClick={() => onDelete(id)} // Ensure the correct ID is passed
-            className="w-full py-2 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300"
+            onClick={() => onDelete(id_hewan)}
+            className="w-full py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300"
           >
             Hapus
           </button>
@@ -51,7 +56,7 @@ const PostingHewanPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axiosInstance.get("/hewan");
+        const response = await axiosInstance.get("/hewan/userHewan");
         setData(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -61,11 +66,11 @@ const PostingHewanPage = () => {
     fetchData();
   }, []);
 
-  const handleDeletePosting = async (id) => {
-    console.log("Deleting post with id:", id); // Debug log
+  const handleDeletePosting = async (id_hewan) => {
+    console.log("Deleting post with id:", id_hewan); // Debug log
     try {
-      await axiosInstance.delete(`/hewan/${id}`);
-      setData(data.filter((item) => item.id !== id));
+      await axiosInstance.delete(`/hewan/${id_hewan}`);
+      setData(data.filter((item) => item.id_hewan !== id_hewan));
     } catch (error) {
       console.error("Error deleting posting:", error);
     }
@@ -116,14 +121,14 @@ const PostingHewanPage = () => {
             </div>
 
             <div className="container mx-auto p-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 h-auto w-auto">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2">
                 {data.map((item) => (
                   <Card
-                    key={item.id}
-                    id={item.id}
+                    key={item.id_hewan}
+                    id_hewan={item.id_hewan} // Ensure the correct ID is passed
                     Nama={item.nama}
-                    JenisHewan={item.jenisHewan}
-                    Kelamin={item.kelamin}
+                    JenisHewan={item.jenis_hewan}
+                    Kelamin={item.gender} // Adjust property name to match your API response
                     Usia={item.usia}
                     imageUrl={item.url_fotoutama}
                     onDelete={handleDeletePosting} // Pass the delete function

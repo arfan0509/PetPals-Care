@@ -3,6 +3,7 @@ import {
   uploadHewan,
   uploadFotoHewan,
   getHewanWithUser,
+  getHewanByUserLogin,
   deleteHewan,
 } from "../controllers/hewanController.js";
 import verifyToken from "../middleware/VerifyToken.js";
@@ -10,6 +11,8 @@ import uploadFotoUtama from "../middleware/multerHewan.js";
 import uploadFotoHewanArray from "../middleware/multerFotohewan.js";
 
 const router = express.Router();
+
+router.get("/", getHewanWithUser);
 
 // Rute untuk mengunggah data hewan beserta foto utama
 router.post(
@@ -26,7 +29,8 @@ router.post(
   uploadFotoHewanArray.array("photos", 5), // Menggunakan multer middleware untuk menghandle multiple files
   uploadFotoHewan
 );
-router.get("/", getHewanWithUser);
+
+router.get("/userHewan", verifyToken, getHewanByUserLogin);
 router.delete("/:id", verifyToken, deleteHewan);
 
 export default router;

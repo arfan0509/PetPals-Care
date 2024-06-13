@@ -76,14 +76,16 @@ const Card = ({ JenisHewan, Nama, Kelamin, Usia, imageUrl }) => {
     <div className="max-w-xs mx-1 bg-white rounded-xl shadow-lg overflow-hidden">
       <img className="w-full h-52 object-cover" src={imageUrl} alt={Nama} />
       <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">
+        <div className="font-bold text-xl mb-2 line-clamp-1">
           <h1>{JenisHewan}</h1>
         </div>
-        <p className="text-[#667479] text-sm">Nama: {Nama}</p>
+        <p className="text-[#667479] text-sm line-clamp-1">Nama: {Nama}</p>
         <div className="flex gap-2 items-center">
-          <p className="text-[#667479] text-sm">Kelamin: {Kelamin}</p>
+          <p className="text-[#667479] text-sm line-clamp-1">
+            Kelamin: {Kelamin}
+          </p>
           <span className="text-[#667479] text-sm">&bull;</span>
-          <p className="text-[#667479] text-sm">Usia: {Usia}</p>
+          <p className="text-[#667479] text-sm line-clamp-1">Usia: {Usia}</p>
         </div>
         <a href="/Detail-hewan">
           <button className="mt-4 w-full py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300">
