@@ -22,6 +22,7 @@ import GantiPasswordUser from "./pages/GantiPasswordUser";
 import GantiPasswordDokter from "./pages/GantipasswordDokter";
 import PostingHewanPage from "./pages/PostingHewanPage";
 import DetailDokter from "./pages/DetailDokter";
+import PetDetailPage from "./pages/PetDetailPage";
 
 const PrivateRoute = ({ children }) => {
   const isAuthenticated = localStorage.getItem("accessToken");
@@ -123,6 +124,15 @@ const App = () => {
           element={
             <PrivateRoute>
               <DetailDokter />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/detailhewan/:id"
+          element={
+            <PrivateRoute>
+              <PetDetailPage />
             </PrivateRoute>
           }
         />

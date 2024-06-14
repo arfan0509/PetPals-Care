@@ -1,77 +1,11 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar-after";
 import Footer from "../Components/Footer-after";
 import axios from "../context/axiosConfig";
 import AdopsiBanner from "../assets/images/adopsi.png";
 
-// const data = [
-//   {
-//     id: 1,
-//     JenisHewan: "Kucing Anggora",
-//     Nama: "Fluffy",
-//     Kelamin: "Betina",
-//     Usia: "2 Bulan",
-//     imageUrl: "https://i.ibb.co.com/ckN3v0F/Angora.png",
-//   },
-//   {
-//     id: 2,
-//     JenisHewan: "Iguana Green",
-//     Nama: "Greendy",
-//     Kelamin: "Jantan",
-//     Usia: "9 Bulan",
-//     imageUrl: "https://i.ibb.co.com/MnCPpF6/iguana.png",
-//   },
-//   {
-//     id: 3,
-//     JenisHewan: "Kelinci Alaska",
-//     Nama: "Bunny",
-//     Kelamin: "Betina",
-//     Usia: "6 Bulan",
-//     imageUrl: "https://i.ibb.co.com/WDQmvjH/kelinci.png",
-//   },
-//   {
-//     id: 4,
-//     JenisHewan: "Kura-kura Darat",
-//     Nama: "Xeca",
-//     Kelamin: "Betina",
-//     Usia: "5 Tahun",
-//     imageUrl: "https://i.ibb.co.com/bFVrLxx/kura.png",
-//   },
-//   {
-//     id: 5,
-//     JenisHewan: "Kucing Persia",
-//     Nama: "Sassy",
-//     Kelamin: "Betina",
-//     Usia: "2 Tahun",
-//     imageUrl: "https://i.ibb.co.com/K98b2mf/persia.png",
-//   },
-//   {
-//     id: 6,
-//     JenisHewan: "Anjing Shiba Inu",
-//     Nama: "Cleo",
-//     Kelamin: "Betina",
-//     Usia: "2 Tahun",
-//     imageUrl: "https://i.ibb.co.com/ct4kv3b/shiba.png",
-//   },
-//   {
-//     id: 7,
-//     JenisHewan: "Kucing Lokal",
-//     Nama: "(Belum Ada)",
-//     Kelamin: "Jantan",
-//     Usia: "2 Bulan",
-//     imageUrl: "https://i.ibb.co.com/c8kJ9x9/lokal.png",
-//   },
-//   {
-//     id: 8,
-//     JenisHewan: "Anjing Maltase",
-//     Nama: "Fuzzy",
-//     Kelamin: "Betina",
-//     Usia: "3 Bulan",
-//     imageUrl: "https://i.ibb.co.com/wSh5zGx/maltase.png",
-//   },
-// ];
-
-const Card = ({ JenisHewan, Nama, Kelamin, Usia, imageUrl }) => {
+const Card = ({ JenisHewan, Nama, Kelamin, Usia, imageUrl, onDetailClick }) => {
   return (
     <div className="max-w-xs mx-1 bg-white rounded-xl shadow-lg overflow-hidden">
       <img className="w-full h-52 object-cover" src={imageUrl} alt={Nama} />
@@ -87,11 +21,12 @@ const Card = ({ JenisHewan, Nama, Kelamin, Usia, imageUrl }) => {
           <span className="text-[#667479] text-sm">&bull;</span>
           <p className="text-[#667479] text-sm line-clamp-1">Usia: {Usia}</p>
         </div>
-        <a href="/Detail-hewan">
-          <button className="mt-4 w-full py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300">
-            Lihat Detail
-          </button>
-        </a>
+        <button
+          className="mt-4 w-full py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300"
+          onClick={onDetailClick}
+        >
+          Lihat Detail
+        </button>
       </div>
     </div>
   );
@@ -99,6 +34,7 @@ const Card = ({ JenisHewan, Nama, Kelamin, Usia, imageUrl }) => {
 
 const AdopsiPage = () => {
   const [Hewan, setHewan] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchHewan = async () => {
@@ -106,12 +42,17 @@ const AdopsiPage = () => {
         const response = await axios.get("/hewan/");
         setHewan(response.data);
       } catch (error) {
-        console.error("Failed to fetch doctors:", error);
+        console.error("Failed to fetch pets:", error);
       }
     };
 
     fetchHewan();
   }, []);
+
+  const handleDetailClick = (hewanId) => {
+    navigate(`/detailhewan/${hewanId}`);
+  };
+
   return (
     <>
       <Navbar />
@@ -140,6 +81,7 @@ const AdopsiPage = () => {
               Kelamin={item.gender}
               Usia={item.usia}
               imageUrl={item.url_fotoutama}
+              onDetailClick={() => handleDetailClick(item.id_hewan)}
             />
           ))}
         </div>
