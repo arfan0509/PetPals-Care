@@ -26,7 +26,7 @@ const storageFotoUtama = multer.diskStorage({
 
 const uploadFotoUtama = multer({
   storage: storageFotoUtama,
-  limits: { fileSize: 5 * 1024 * 1024 }, // Batasan ukuran file
+  // limits: { fileSize: 5 * 1024 * 1024 }, // Batasan ukuran file
   fileFilter: function (req, file, cb) {
     // Filter untuk tipe file gambar (misal: jpeg, jpg, png)
     const filetypes = /jpeg|jpg|png/;

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "../context/axiosConfig";
+import UploadFotoHewanModal from "./UploadFotoHewanModal";
 
 const PostingHewanModal = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -15,6 +16,8 @@ const PostingHewanModal = ({ onClose }) => {
   });
 
   const [preview, setPreview] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [hewanId, setHewanId] = useState(null); // State untuk menyimpan ID hewan yang berhasil dibuat
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,12 +29,39 @@ const PostingHewanModal = ({ onClose }) => {
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setFormData((prevData) => ({
-      ...prevData,
-      main_photo: file,
-    }));
-
     if (file) {
+      const fileType = file.type;
+      const fileSize = file.size / 1024 / 1024; // Convert size to MB
+
+      // Check if file type is valid
+      const validFileTypes = ["image/jpeg", "image/jpg", "image/png"];
+      if (!validFileTypes.includes(fileType)) {
+        setErrorMessage("File harus dalam format JPG, JPEG, atau PNG.");
+        setFormData((prevData) => ({
+          ...prevData,
+          main_photo: null,
+        }));
+        setPreview(null);
+        return;
+      }
+
+      // Check if file size is within limit
+      if (fileSize > 5) {
+        setErrorMessage("Ukuran file maksimal adalah 5MB.");
+        setFormData((prevData) => ({
+          ...prevData,
+          main_photo: null,
+        }));
+        setPreview(null);
+        return;
+      }
+
+      setErrorMessage("");
+      setFormData((prevData) => ({
+        ...prevData,
+        main_photo: file,
+      }));
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result); // Menampilkan preview gambar
@@ -63,13 +93,18 @@ const PostingHewanModal = ({ onClose }) => {
           Authorization: `Bearer ${accessToken}`,
         },
       });
+
       console.log("Response:", response.data);
-      onClose();
-      window.location.reload();
+      setHewanId(response.data.hewanId); // Mengambil ID hewan dari respons
     } catch (error) {
       console.error("Error uploading hewan:", error);
     }
   };
+
+  // Memastikan bahwa hewanId tidak null untuk menampilkan modal UploadFotoHewanModal
+  if (hewanId !== null) {
+    return <UploadFotoHewanModal hewanId={hewanId} onClose={onClose} />;
+  }
 
   return (
     <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-50">
@@ -190,6 +225,9 @@ const PostingHewanModal = ({ onClose }) => {
               required
               className="w-full px-4 py-2 border rounded-lg"
             />
+            {errorMessage && (
+              <p className="text-red-500 text-sm mt-2">{errorMessage}</p>
+            )}
           </div>
           {preview && (
             <div className="mb-4">
