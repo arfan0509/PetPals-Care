@@ -13,6 +13,10 @@ import {
 import { refreshToken } from "../controllers/RefreshToken.js";
 import verifyToken from "../middleware/VerifyToken.js";
 import uploadPP from "../middleware/multer.js";
+import {
+  getAllDoctors,
+  getDoctorById,
+} from "../controllers/doctorController.js";
 
 const router = express.Router();
 
@@ -33,5 +37,10 @@ router.put(
 router.put("/change-password", verifyToken, changePassword);
 router.delete("/delete-photo", verifyToken, deletePhoto);
 router.delete("/delete-account", verifyToken, deleteAccount);
+
+// Rute untuk mendapatkan seluruh data dokter
+router.get("/all-doctors", getAllDoctors);
+// Rute untuk mendapatkan detail dokter berdasarkan id_dokter
+router.get("/doctor/:id", getDoctorById);
 
 export default router;

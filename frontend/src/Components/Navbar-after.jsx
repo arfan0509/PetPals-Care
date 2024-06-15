@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axiosInstance from "../context/axiosConfig"; // Import axiosInstance yang telah didefinisikan sebelumnya
 import { jwtDecode } from "jwt-decode";
-import Logo from "../assets/images/logo.png";
 
 function NavbarAfter() {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,7 +35,7 @@ function NavbarAfter() {
           {/* Logo Section */}
           <div className="flex items-center">
             <a href="/Beranda" className="flex items-center py-2 px-2">
-              <img src={Logo} alt="Logo" className="h-16 w-15" />
+              <img src="logo.png" alt="Logo" className="h-16 w-15" />
             </a>
           </div>
 
