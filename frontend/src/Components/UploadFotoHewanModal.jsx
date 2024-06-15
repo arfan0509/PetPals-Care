@@ -64,7 +64,7 @@ const UploadFotoHewanModal = ({ hewanId, onClose }) => {
       window.location.reload(); // Refresh halaman untuk memuat perubahan foto
     } catch (error) {
       console.error("Error uploading photos:", error);
-      setErrorMessage("Gagal mengunggah foto. Silakan coba lagi.");
+      setErrorMessage("Masukkan foto terlebih dahulu.");
     }
   };
 

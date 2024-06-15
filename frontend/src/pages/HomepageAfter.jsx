@@ -136,7 +136,8 @@ const HomepageAfter = () => {
     const fetchDoctors = async () => {
       try {
         const response = await axios.get("/doctors");
-        setDoctors(response.data.slice(0, 4)); // Display only 4 doctors
+        const shuffledDoctors = response.data.sort(() => Math.random() - 0.5);
+        setDoctors(shuffledDoctors.slice(0, 4)); // Display only 4 doctors
       } catch (error) {
         console.error("Failed to fetch doctors:", error);
       }
@@ -145,7 +146,9 @@ const HomepageAfter = () => {
     const fetchPets = async () => {
       try {
         const response = await axios.get("/hewan");
-        setPets(response.data);
+        // Mengacak urutan data hewan sebelum disimpan ke state
+        const shuffledPets = response.data.sort(() => Math.random() - 0.5);
+        setPets(shuffledPets.slice(0, 4)); // Ambil 4 hewan secara acak
       } catch (error) {
         console.error("Failed to fetch pets:", error);
       }
