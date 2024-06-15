@@ -1,6 +1,13 @@
+import React, { useState, useEffect } from "react";
 import Navbar from "../Components/Navbar-after";
-import Footer from '../Components/Footer-after';
+import Footer from "../Components/Footer-after";
 
+const logoutUser = () => {
+  localStorage.removeItem("accessToken");
+  localStorage.removeItem("user");
+  // Redirect ke halaman login atau halaman lain yang sesuai
+  window.location.href = "/";
+};
 
 const ProfilUserPage = () => {
   return (
@@ -9,20 +16,32 @@ const ProfilUserPage = () => {
       <div className="bg-white-light-2 w-full h-auto flex justify-start">
         <div className=" w-1/3 h-screen p-8  ">
           <ul>
-          <li className="p-2 hover:bg-gray-400 border-collapse rounded-lg"><a href="/Profil">Profil Saya</a></li>
-            <li className="p-2  hover:bg-gray-400 border-collapse rounded-lg"><a href="#">Daftar Alamat</a></li>
-            <li className="p-2  hover:bg-gray-400 border-collapse rounded-lg"><a href="#">Favorit</a></li>
-            <li className="p-2  hover:bg-gray-400 border-collapse rounded-lg"><a href="#">Pesan</a></li>
-            <li className="p-2  hover:bg-gray-400 border-collapse rounded-lg"><a href="/Posting-hewan">Posting Hewan Saya</a></li>
-            <li className="py-8 px-2"> <a href="http://localhost:5173/"> Keluar</a></li>
+            <li className="p-2 hover:bg-gray-400 border-collapse rounded-lg">
+              <a href="/Profil">Profil Saya</a>
+            </li>
+            <li className="p-2  hover:bg-gray-400 border-collapse rounded-lg">
+              <a href="#">Daftar Alamat</a>
+            </li>
+            <li className="p-2  hover:bg-gray-400 border-collapse rounded-lg">
+              <a href="#">Favorit</a>
+            </li>
+            <li className="p-2  hover:bg-gray-400 border-collapse rounded-lg">
+              <a href="#">Pesan</a>
+            </li>
+            <li className="p-2  hover:bg-gray-400 border-collapse rounded-lg">
+              <a href="/Posting-hewan">Posting Hewan Saya</a>
+            </li>
+            <li className="py-8 px-2">
+              <button onClick={logoutUser}>Keluar</button>
+            </li>
           </ul>
         </div>
 
         <div className=" w-full h-auto p-12">
           <div className="bg-white p-10 rounded-xl w-full h-auto shadow-2xl">
-            <h1 className="py-4 font-bold text-1xl" > Profil Saya</h1>
+            <h1 className="py-4 font-bold text-1xl"> Profil Saya</h1>
             <div className="flex justify-start items-center gap-4 pt-6">
-              <div className=" w-[100px] h-[100px] bg-orange-400 rounded-full flex justify-center items-center" >
+              <div className=" w-[100px] h-[100px] bg-orange-400 rounded-full flex justify-center items-center">
                 <p>D</p>
               </div>
 
@@ -32,7 +51,7 @@ const ProfilUserPage = () => {
               </div>
             </div>
             <div className=" h-1/2 flex justify-start gap-8 items-center  w-full h-auto gap-28">
-            <div className="py-4">
+              <div className="py-4">
                 <p>Umur</p>
                 <p>25 Tahun</p>
               </div>
@@ -54,7 +73,7 @@ const ProfilUserPage = () => {
       </div>
       <Footer />
     </>
-  )
-}
+  );
+};
 
-export default ProfilUserPage
+export default ProfilUserPage;

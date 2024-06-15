@@ -2,6 +2,19 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import pool from "../database/Database.js";
 
+export const getUsers = async (req, res) => {
+  const userId = req.user.id; // Mengambil ID pengguna dari token akses
+  try {
+    const [rows] = await pool.query(
+      "SELECT id_user, nama, no_hp, email, gender, usia, alamat FROM users WHERE id_user = ?",
+      [userId]
+    );
+    res.status(200).json(rows);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 export const registerUser = async (req, res) => {
   const {
     nama,
@@ -74,6 +87,48 @@ export const loginUser = async (req, res) => {
     });
 
     res.json({ accessToken });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+// Fungsi untuk mendapatkan data pengguna dari token akses
+export const getUserDataFromAccessToken = (accessToken) => {
+  try {
+    const decoded = jwt.verify(accessToken, process.env.ACCESS_TOKEN_SECRET);
+    return decoded;
+  } catch (error) {
+    return null;
+  }
+};
+
+// Fungsi untuk menampilkan profil pengguna
+export const getUserProfile = async (req, res) => {
+  const accessToken = req.headers.authorization.split(" ")[1];
+  const userData = getUserDataFromAccessToken(accessToken);
+  if (!userData) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+
+  try {
+    const [rows] = await pool.query("SELECT * FROM users WHERE id_user = ?", [
+      userData.id,
+    ]);
+    if (rows.length === 0) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const user = rows[0];
+    // Hilangkan informasi sensitif sebelum mengirimkan respon
+    const userProfile = {
+      nama: user.nama,
+      email: user.email,
+      gender: user.gender,
+      usia: user.usia,
+      alamat: user.alamat,
+    };
+
+    res.status(200).json(userProfile);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

@@ -1,5 +1,5 @@
 import React from "react";
-import Navbar from "../Components/Navbar";
+import NavbarAfter from "../Components/Navbar-after"; // Navbar for after login
 import heroImage from "../assets/images/hero-home.jpg";
 import image1 from "../assets/images/vectorhome1.png";
 import image2 from "../assets/images/vectorhome2.png";
@@ -9,8 +9,7 @@ import doktercwo from "../assets/images/DokterCowo.png";
 import doktercwe from "../assets/images/DokterCewe.png";
 import vaksinKucing from "../assets/images/vaksinimg.jpg";
 import adoptionBgImage from "../assets/images/banner2.png";
-import NavbarAfter from "../Components/Navbar-after";
-import Footer from "../Components/Footer-after";
+import Footer from "../Components/Footer-after"; // Footer for after login
 
 const data = [
   {
@@ -171,12 +170,10 @@ const PetCard = ({ imageUrl, nama, ras, kelamin, usia }) => {
   );
 };
 
-const HomepageBefore = () => {
+const HomepageAfter = () => {
   return (
     <div className="font-poppins">
-      <div>
-        <NavbarAfter />
-      </div>
+      <NavbarAfter />
       <div
         className="relative w-full h-screen bg-cover bg-center"
         style={{ backgroundImage: `url(${heroImage})` }}
@@ -253,7 +250,7 @@ const HomepageBefore = () => {
               Rekomendasi Dokter Hewan
             </div>
           </div>
-          <a href="/Daftar-dokter-hewan">
+          <a href="/Dokter-hewan">
             <button className="bg-[#ED9455] py-2 px-4 hover:bg-[#f89b59] transition duration-300 rounded-md flex justify-center items-center">
               <span className="text-white">Tampilkan Lainnya</span>
             </button>
@@ -277,7 +274,7 @@ const HomepageBefore = () => {
         style={{ backgroundImage: `url(${adoptionBgImage})` }}
       >
         <div className="absolute left-[130px] top-[120px] w-full lg:w-1/2">
-          <h2 className="text-4xl font-bold mb-10 leading-tight font">
+          <h2 className="text-4xl font-bold mb-10 leading-tight">
             Manfaat Mempelihara Hewan Membawa Kebahagiaan dalam Kehidupan Anda
           </h2>
           <div className="text-gray-700 space-y-4 leading-relaxed">
@@ -308,9 +305,11 @@ const HomepageBefore = () => {
               Hewan yang Siap diadopsi
             </div>
           </div>
-          <button className="bg-[#ED9455] py-2 px-4 hover:bg-[#f89b59] transition duration-300 rounded-md flex justify-center items-center">
-            <span className="text-white">Tampilkan Semua</span>
-          </button>
+          <a href="/Adopsi-hewan">
+            <button className="bg-[#ED9455] py-2 px-4 hover:bg-[#f89b59] transition duration-300 rounded-md flex justify-center items-center">
+              <span className="text-white">Tampilkan Semua</span>
+            </button>
+          </a>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {petData.map((pet) => (
@@ -330,4 +329,4 @@ const HomepageBefore = () => {
   );
 };
 
-export default HomepageBefore;
+export default HomepageAfter;

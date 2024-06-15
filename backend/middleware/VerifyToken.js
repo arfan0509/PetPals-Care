@@ -1,3 +1,4 @@
+// VerifyToken.js
 import jwt from "jsonwebtoken";
 
 const verifyToken = (req, res, next) => {
@@ -6,9 +7,9 @@ const verifyToken = (req, res, next) => {
 
   if (!token) return res.sendStatus(401); // Unauthorized
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, decoded) => {
     if (err) return res.sendStatus(403); // Forbidden
-    req.user = user;
+    req.user = decoded; // Menambahkan informasi pengguna ke objek req
     next();
   });
 };

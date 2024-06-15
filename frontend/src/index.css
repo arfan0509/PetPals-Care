@@ -83,3 +83,7 @@ html {
   border-top-left-radius: 160px;
   border-bottom-left-radius: 160px;
 }
+.custom-border-radius2 {
+  border-top-right-radius: 160px;
+  border-bottom-right-radius: 160px;
+}

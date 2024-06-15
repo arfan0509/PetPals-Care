@@ -23,7 +23,7 @@ function NavbarAfter() {
               Beranda
             </a>
             <a
-              href="/Daftar-dokter-hewan"
+              href="/Dokter-hewan"
               className="py-4 px-2 text-black font-medium hover:text-[#ED9455] transition duration-300"
             >
               Cari Dokter
@@ -35,7 +35,7 @@ function NavbarAfter() {
               Adopsi
             </a>
             <a
-              href="/Tentang-PetPalsCare"
+              href="/TentangKami"
               className="py-4 px-2 text-black font-medium hover:text-[#ED9455] transition duration-300"
             >
               Tentang Kami
