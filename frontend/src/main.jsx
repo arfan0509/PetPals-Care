@@ -4,6 +4,8 @@ import App from "./App";
 import "./index.css";
 import "aos/dist/aos.css"; // Import AOS CSS
 import AOS from "aos";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 AOS.init({
   duration: 1000, // Durasi animasi

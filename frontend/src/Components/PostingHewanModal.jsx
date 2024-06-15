@@ -17,7 +17,7 @@ const PostingHewanModal = ({ onClose }) => {
 
   const [preview, setPreview] = useState(null);
   const [errorMessage, setErrorMessage] = useState("");
-  const [hewanId, setHewanId] = useState(null); // State untuk menyimpan ID hewan yang berhasil dibuat
+  const [hewanId, setHewanId] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,9 +31,8 @@ const PostingHewanModal = ({ onClose }) => {
     const file = e.target.files[0];
     if (file) {
       const fileType = file.type;
-      const fileSize = file.size / 1024 / 1024; // Convert size to MB
+      const fileSize = file.size / 1024 / 1024;
 
-      // Check if file type is valid
       const validFileTypes = ["image/jpeg", "image/jpg", "image/png"];
       if (!validFileTypes.includes(fileType)) {
         setErrorMessage("File harus dalam format JPG, JPEG, atau PNG.");
@@ -45,7 +44,6 @@ const PostingHewanModal = ({ onClose }) => {
         return;
       }
 
-      // Check if file size is within limit
       if (fileSize > 5) {
         setErrorMessage("Ukuran file maksimal adalah 5MB.");
         setFormData((prevData) => ({
@@ -64,7 +62,7 @@ const PostingHewanModal = ({ onClose }) => {
 
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreview(reader.result); // Menampilkan preview gambar
+        setPreview(reader.result);
       };
       reader.readAsDataURL(file);
     } else {
@@ -74,10 +72,27 @@ const PostingHewanModal = ({ onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Validasi data sebelum mengirim
+    const { jenis_hewan, gender, usia, warna, lokasi, deskripsi, main_photo } =
+      formData;
+
+    if (
+      !jenis_hewan ||
+      !gender ||
+      !usia ||
+      !warna ||
+      !lokasi ||
+      !deskripsi ||
+      !main_photo
+    ) {
+      setErrorMessage("Pastikan semua data diisi.");
+      return;
+    }
+
     try {
       const formDataObj = new FormData();
 
-      // Check if the 'nama' field is empty and set default value
       if (!formData.nama) {
         formData.nama = "(Belum memiliki nama)";
       }
@@ -95,20 +110,28 @@ const PostingHewanModal = ({ onClose }) => {
       });
 
       console.log("Response:", response.data);
-      setHewanId(response.data.hewanId); // Mengambil ID hewan dari respons
+      setHewanId(response.data.hewanId);
     } catch (error) {
       console.error("Error uploading hewan:", error);
+      setErrorMessage(
+        "Terjadi kesalahan saat mengunggah data. Silakan coba lagi."
+      );
     }
   };
 
-  // Memastikan bahwa hewanId tidak null untuk menampilkan modal UploadFotoHewanModal
   if (hewanId !== null) {
     return <UploadFotoHewanModal hewanId={hewanId} onClose={onClose} />;
   }
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg h-4/5 overflow-y-auto w-2/3">
+    <div className="font-poppins fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-50">
+      <div className="bg-white p-6 rounded-lg h-4/5 overflow-y-auto w-2/3 relative">
+        <button
+          onClick={onClose}
+          className="absolute top-0 right-0 mt-4 mr-4 text-gray-500 hover:text-gray-700 transition duration-300"
+        >
+          <i className="fas fa-times fa-2x"></i>
+        </button>
         <h2 className="text-2xl font-bold mb-4">Posting Hewan</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -130,7 +153,7 @@ const PostingHewanModal = ({ onClose }) => {
             <label className="block text-gray-700">
               Jenis Hewan{" "}
               <div className="text-xs opacity-60 mb-1">
-                (contoh: Kucing Lokal)
+                (Contoh: Kucing Lokal)
               </div>
             </label>
             <input
@@ -139,6 +162,7 @@ const PostingHewanModal = ({ onClose }) => {
               value={formData.jenis_hewan}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
+              required
             />
           </div>
           <div className="mb-4">
@@ -148,6 +172,7 @@ const PostingHewanModal = ({ onClose }) => {
               value={formData.gender}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
+              required
             >
               <option value=""></option>
               <option value="Jantan">Jantan</option>
@@ -156,10 +181,7 @@ const PostingHewanModal = ({ onClose }) => {
           </div>
           <div className="mb-4">
             <label className="block text-gray-700">
-              Usia{" "}
-              <div className="text-xs opacity-60 mb-1">
-                (dalam satuan bulan)
-              </div>
+              Usia <div className="text-xs opacity-60 mb-1">(Dalam bulan)</div>
             </label>
             <input
               type="number"
@@ -167,12 +189,13 @@ const PostingHewanModal = ({ onClose }) => {
               value={formData.usia}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
+              required
             />
           </div>
           <div className="mb-4">
             <label className="block text-gray-700">
               Warna{" "}
-              <div className="text-xs opacity-60 mb-1">(contoh: Putih)</div>
+              <div className="text-xs opacity-60 mb-1">(Contoh: Putih)</div>
             </label>
             <input
               type="text"
@@ -180,13 +203,14 @@ const PostingHewanModal = ({ onClose }) => {
               value={formData.warna}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
+              required
             />
           </div>
           <div className="mb-4">
             <label className="block text-gray-700">
               Lokasi{" "}
               <div className="text-xs opacity-60 mb-1">
-                (masukkan alamat lengkap)
+                (Masukkan alamat lengkap)
               </div>
             </label>
             <input
@@ -195,13 +219,14 @@ const PostingHewanModal = ({ onClose }) => {
               value={formData.lokasi}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
+              required
             />
           </div>
           <div className="mb-4">
             <label className="block text-gray-700">
               Deskripsi Tambahan{" "}
               <div className="text-xs opacity-60 mb-1">
-                (masukkan deskripsi tambahan)
+                (Masukkan deskripsi tambahan)
               </div>
             </label>
             <textarea
@@ -210,11 +235,12 @@ const PostingHewanModal = ({ onClose }) => {
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
               rows="3"
+              required
             />
           </div>
           <div className="mb-4">
             <label htmlFor="main_photo" className="block font-semibold mb-1">
-              Foto Utama
+              Foto Sampul Hewan
             </label>
             <input
               type="file"
@@ -230,27 +256,21 @@ const PostingHewanModal = ({ onClose }) => {
             )}
           </div>
           {preview && (
-            <div className="mb-4">
+            <div className="mb-4 flex justify-center">
               <img
                 src={preview}
                 alt="Preview"
-                className="w-full h-auto rounded-lg"
+                className="w-60 h-60 object-cover rounded-lg"
               />
             </div>
           )}
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-[#DE9455] text-white rounded-lg hover:bg[#f89b59] transition duration-300 mt-4"
+            className="w-full py-2 px-4 bg-[#DE9455] text-white rounded-lg hover:bg-[#f89b59] transition duration-300 mt-4"
           >
-            Upload
+            Selanjutnya
           </button>
         </form>
-        <button
-          onClick={onClose}
-          className="mt-4 py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"
-        >
-          Close
-        </button>
       </div>
     </div>
   );

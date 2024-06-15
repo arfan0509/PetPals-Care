@@ -69,13 +69,13 @@ const UploadFotoHewanModal = ({ hewanId, onClose }) => {
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-50">
+    <div className="font-poppins fixed top-0 left-0 w-full h-full flex justify-center items-center bg-gray-800 bg-opacity-50">
       <div className="bg-white p-6 rounded-lg h-4/5 overflow-y-auto w-2/3">
         <h2 className="text-2xl font-bold mb-4">Upload Foto Hewan</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="photos" className="block font-semibold mb-1">
-              Pilih Foto
+              Pilih Foto (maks. 5 foto)
             </label>
             <input
               type="file"
@@ -99,7 +99,7 @@ const UploadFotoHewanModal = ({ hewanId, onClose }) => {
                     key={index}
                     src={src}
                     alt={`Preview ${index}`}
-                    className="w-full h-auto rounded-lg"
+                    className="w-60 h-60 rounded-lg object-cover"
                   />
                 ))}
               </div>
@@ -112,12 +112,6 @@ const UploadFotoHewanModal = ({ hewanId, onClose }) => {
             Upload
           </button>
         </form>
-        <button
-          onClick={onClose}
-          className="mt-4 py-2 px-4 bg-red-500 text-white rounded-lg hover:bg-red-600 transition duration-300"
-        >
-          Close
-        </button>
       </div>
     </div>
   );

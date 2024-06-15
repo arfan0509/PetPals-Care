@@ -8,6 +8,7 @@ import {
   updateDoctor,
   changeDoctorPassword,
   deleteDoctorPhoto,
+  getAllDoctors,
 } from "../controllers/doctorController.js";
 import { refreshTokenDoctor } from "../controllers/RefreshToken.js";
 import verifyToken from "../middleware/VerifyToken.js";
@@ -19,6 +20,9 @@ router.post("/register", registerDoctor);
 router.post("/login", loginDoctor);
 router.get("/refresh-token", refreshTokenDoctor);
 router.delete("/logout", logoutDoctor);
+
+// Rute untuk mendapatkan seluruh data dokter
+router.get("/", getAllDoctors);
 
 // Rute yang memerlukan otentikasi
 router.get("/dokter-data", verifyToken, getDoctorProfile);

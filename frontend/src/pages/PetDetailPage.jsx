@@ -3,16 +3,19 @@ import { useParams } from "react-router-dom";
 import Navbar from "../Components/Navbar-after";
 import Footer from "../Components/Footer-after";
 import axios from "../context/axiosConfig";
+import Slider from "react-slick";
 
 const PetDetailPage = () => {
   const { id } = useParams();
   const [Hewan, setHewan] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const fetchHewanDetail = async () => {
       try {
-        const response = await axios.get(`/hewan/${id}`);
+        const response = await axios.get(`/users/hewan/${id}`);
         setHewan(response.data);
+        setSelectedImage(response.data.url_fotoutama);
       } catch (error) {
         console.error("Failed to fetch pet details:", error);
       }
@@ -21,54 +24,112 @@ const PetDetailPage = () => {
     fetchHewanDetail();
   }, [id]);
 
+  const handleThumbnailClick = (url) => {
+    setSelectedImage(url);
+  };
+
   if (!Hewan) {
     return <div>Loading...</div>;
   }
 
+  const settings = {
+    dots: true,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 1,
+    arrows: true,
+    responsive: [
+      {
+        breakpoint: 768, // Tablet
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+        },
+      },
+      {
+        breakpoint: 480, // Mobile
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
+  };
+
+  // Memasukkan foto utama ke dalam array foto_hewan
+  const fotoHewanWithMainPhoto = [
+    { id_foto: "main", url_foto: Hewan.url_fotoutama },
+    ...Hewan.foto_hewan,
+  ];
+
   return (
-    <div className="font-sans">
+    <div className="font-poppins">
       <Navbar />
-      <div className="min-h-screen font-sans flex flex-col md:flex-row p-3 max-w-7xl mt-5 mx-auto pb-24">
+      <div className="min-h-screen flex flex-col p-3 max-w-7xl mt-5 mx-auto pb-24 md:flex-row md:space-x-8">
         {/* Bagian gambar */}
-        <div className="w-full md:w-1/2 flex flex-col items-start mb-8 md:mb-0">
-          <img
-            className="w-[530px] h-[530px] rounded-lg mb-4 object-cover"
-            src={Hewan.url_fotoutama}
-            alt={Hewan.nama}
-          />
-          <div className="flex space-x-3 justify-start">
-            <img
-              className="w-24 h-24 rounded-md border-2"
-              src="https://via.placeholder.com/94x94"
-              alt="Thumbnail"
-            />
-            <img
-              className="w-24 h-24 rounded-md border-2"
-              src="https://via.placeholder.com/94x94"
-              alt="Thumbnail"
-            />
-            {/* Add more images as needed */}
+        <div className="w-full md:w-2/5 flex flex-col items-center mb-8 md:mb-0">
+          <div className="w-full mb-4 relative">
+            <div className="relative w-full" style={{ paddingBottom: "100%" }}>
+              <img
+                className="absolute top-0 left-0 w-full h-full object-cover rounded-lg"
+                src={selectedImage}
+                alt={Hewan.nama}
+              />
+            </div>
           </div>
+          <Slider {...settings} className="w-full">
+            {fotoHewanWithMainPhoto.map((foto) => (
+              <div key={foto.id_foto} className="px-1">
+                <img
+                  className="w-full h-24 md:h-40 rounded-md border-2 cursor-pointer object-cover"
+                  src={foto.url_foto}
+                  alt={`Thumbnail ${foto.id_foto}`}
+                  onClick={() => handleThumbnailClick(foto.url_foto)}
+                />
+              </div>
+            ))}
+          </Slider>
         </div>
 
         {/* Bagian deskripsi */}
-        <div className="w-full md:w-1/2 md:ml-8 flex flex-col">
-          <h1 className="text-2xl font-bold font-sans mb-4">{Hewan.nama}</h1>
+        <div className="w-full md:w-3/5 flex flex-col">
+          <h1 className="text-2xl font-bold font-sans mb-4">
+            {Hewan.jenis_hewan}
+          </h1>
 
           <div className="flex flex-col space-y-4">
             <div className="border-b border-gray-200 py-2 flex">
-              <span className="text-gray-500 font-sans w-32">
-                Jenis Hewan:{" "}
-              </span>
-              <span className="font-sans">{Hewan.jenis_hewan}</span>
+              <span className="text-gray-500 font-sans w-32">Nama: </span>
+              <span className="font-sans">{Hewan.nama}</span>
             </div>
             <div className="border-b border-gray-200 py-2 flex">
-              <span className="text-gray-500 font-sans w-32">Kelamin: </span>
+              <span className="text-gray-500 font-sans w-32">
+                Jenis kelamin:{" "}
+              </span>
               <span className="font-sans">{Hewan.gender}</span>
             </div>
             <div className="border-b border-gray-200 py-2 flex">
               <span className="text-gray-500 font-sans w-32">Usia: </span>
               <span className="font-sans">{Hewan.usia}</span>
+            </div>
+            <div className="border-b border-gray-200 py-2 flex">
+              <span className="text-gray-500 font-sans w-32">Warna: </span>
+              <span className="font-sans">{Hewan.warna}</span>
+            </div>
+            <div className="border-b border-gray-200 py-2 flex">
+              <span className="text-gray-500 font-sans w-32">Lokasi: </span>
+              <span className="font-sans">{Hewan.lokasi}</span>
+            </div>
+            <div className="border-b border-gray-200 py-2 flex">
+              <span className="text-gray-500 font-sans w-32">
+                Di publish pada:{" "}
+              </span>
+              <span className="font-sans">{Hewan.tgl_publish}</span>
+            </div>
+            <div className="border-b border-gray-200 py-2 flex">
+              <span className="text-gray-500 font-sans w-32">Deskripsi: </span>
+              <span className="font-sans">{Hewan.deskripsi}</span>
             </div>
             {/* Add more details as needed */}
           </div>

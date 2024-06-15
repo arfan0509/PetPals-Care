@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link as ScrollLink } from "react-scroll";
 import "@fortawesome/fontawesome-free/css/all.min.css";
+import Logo from "../assets/images/logo.png";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,7 +13,7 @@ const Navbar = () => {
           {/* Logo Section */}
           <div className="flex items-center">
             <a href="/" className="flex items-center py-2 px-2">
-              <img src="logo.png" alt="Logo" className="h-16 w-15" />
+              <img src={Logo} alt="Logo" className="h-16 w-15" />
             </a>
           </div>
 
