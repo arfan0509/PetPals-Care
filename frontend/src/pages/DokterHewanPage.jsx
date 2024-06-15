@@ -40,6 +40,8 @@ const DokterHewanPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const fetchDoctors = async () => {
       try {
         const response = await axios.get("/doctors");

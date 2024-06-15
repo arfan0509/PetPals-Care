@@ -100,37 +100,60 @@ const PetDetailPage = () => {
 
           <div className="flex flex-col space-y-4">
             <div className="border-b border-gray-200 py-2 flex">
-              <span className="text-gray-500 font-sans w-32">Nama: </span>
+              <span className="text-gray-500 font-sans w-48">Nama: </span>
               <span className="font-sans">{Hewan.nama}</span>
             </div>
             <div className="border-b border-gray-200 py-2 flex">
-              <span className="text-gray-500 font-sans w-32">
+              <span className="text-gray-500 font-sans w-48">
                 Jenis kelamin:{" "}
               </span>
               <span className="font-sans">{Hewan.gender}</span>
             </div>
             <div className="border-b border-gray-200 py-2 flex">
-              <span className="text-gray-500 font-sans w-32">Usia: </span>
-              <span className="font-sans">{Hewan.usia}</span>
+              <span className="text-gray-500 font-sans w-48">Usia: </span>
+              <span className="font-sans">{Hewan.usia} Bulan</span>
             </div>
             <div className="border-b border-gray-200 py-2 flex">
-              <span className="text-gray-500 font-sans w-32">Warna: </span>
+              <span className="text-gray-500 font-sans w-48">Warna: </span>
               <span className="font-sans">{Hewan.warna}</span>
             </div>
             <div className="border-b border-gray-200 py-2 flex">
-              <span className="text-gray-500 font-sans w-32">Lokasi: </span>
+              <span className="text-gray-500 font-sans w-48">Lokasi: </span>
               <span className="font-sans">{Hewan.lokasi}</span>
             </div>
             <div className="border-b border-gray-200 py-2 flex">
-              <span className="text-gray-500 font-sans w-32">
-                Di publish pada:{" "}
+              <span className="text-gray-500 font-sans w-48">
+                Di posting pada:{" "}
               </span>
               <span className="font-sans">{Hewan.tgl_publish}</span>
             </div>
             <div className="border-b border-gray-200 py-2 flex">
-              <span className="text-gray-500 font-sans w-32">Deskripsi: </span>
+              <span className="text-gray-500 font-sans w-48">Deskripsi: </span>
               <span className="font-sans">{Hewan.deskripsi}</span>
             </div>
+            <div className="border-b border-gray-200 py-2 flex items-center">
+              <span className="text-gray-500 font-sans w-48">
+                Nama Pemilik:{" "}
+              </span>
+              {Hewan.user_url_foto ? (
+                <img
+                  className="w-10 h-10 rounded-full object-cover mr-2"
+                  src={Hewan.user_url_foto}
+                  alt={`Foto ${Hewan.user_nama}`}
+                />
+              ) : (
+                <i className="fas fa-user w-12 h-12 flex items-center"></i>
+              )}
+              <span className="font-sans">{Hewan.user_nama}</span>
+            </div>
+
+            <div className="border-b border-gray-200 py-2 flex">
+              <span className="text-gray-500 font-sans w-48">
+                Nomor HP Pemilik:{" "}
+              </span>
+              <span className="font-sans">{Hewan.user_no_hp}</span>
+            </div>
+
             {/* Add more details as needed */}
           </div>
           <button className="mt-6 px-6 py-3 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300">

@@ -34,7 +34,7 @@ const Card = ({
         <div className="flex gap-2 items-center">
           <p className="text-[#667479] text-sm">Kelamin: {Kelamin}</p>
           <span className="text-[#667479] text-sm">&bull;</span>
-          <p className="text-[#667479] text-sm">Usia: {Usia}</p>
+          <p className="text-[#667479] text-sm">Usia: {Usia} Bulan</p>
         </div>
         <div className="mt-4">
           <button

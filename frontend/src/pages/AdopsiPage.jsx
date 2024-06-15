@@ -19,7 +19,9 @@ const Card = ({ JenisHewan, Nama, Kelamin, Usia, imageUrl, onDetailClick }) => {
             Kelamin: {Kelamin}
           </p>
           <span className="text-[#667479] text-sm">&bull;</span>
-          <p className="text-[#667479] text-sm line-clamp-1">Usia: {Usia}</p>
+          <p className="text-[#667479] text-sm line-clamp-1">
+            Usia: {Usia} Bulan
+          </p>
         </div>
         <button
           className="mt-4 w-full py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300"
@@ -37,9 +39,11 @@ const AdopsiPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+
     const fetchHewan = async () => {
       try {
-        const response = await axios.get("/hewan/");
+        const response = await axios.get("/hewan");
         setHewan(response.data);
       } catch (error) {
         console.error("Failed to fetch pets:", error);

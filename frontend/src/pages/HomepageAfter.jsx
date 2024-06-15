@@ -1,15 +1,15 @@
-import React from "react";
-import NavbarAfter from "../Components/Navbar-after"; // Navbar for after login
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "../context/axiosConfig";
+import NavbarAfter from "../Components/Navbar-after";
+import Footer from "../Components/Footer-after";
 import heroImage from "../assets/images/hero-home.jpg";
 import image1 from "../assets/images/vectorhome1.png";
 import image2 from "../assets/images/vectorhome2.png";
 import image3 from "../assets/images/vectorhome3.png";
 import image4 from "../assets/images/vectorhome4.png";
-import doktercwo from "../assets/images/DokterCowo.png";
-import doktercwe from "../assets/images/DokterCewe.png";
 import vaksinKucing from "../assets/images/vaksinimg.jpg";
 import adoptionBgImage from "../assets/images/banner2.png";
-import Footer from "../Components/Footer-after"; // Footer for after login
 
 const data = [
   {
@@ -42,76 +42,6 @@ const data = [
   },
 ];
 
-const doctorData = [
-  {
-    id: 1,
-    name: "Drh. Bagus Syahputra A",
-    specialty: "Hewan Domestik dan Eksotik",
-    experience: "7 Tahun",
-    imageUrl: doktercwo,
-  },
-  {
-    id: 2,
-    name: "Drh. Nurma Lala",
-    specialty: "Kucing dan Anjing",
-    experience: "5 Tahun",
-    imageUrl: doktercwe,
-  },
-  {
-    id: 3,
-    name: "Drh. Septian Priatama",
-    specialty: "Hewan Ternak dan Unggas",
-    experience: "10 Tahun",
-    imageUrl: doktercwo,
-  },
-  {
-    id: 4,
-    name: "Drh. Ami Kosriami",
-    specialty: "Anjing dan Kucing, Ternak",
-    experience: "15 Tahun",
-    imageUrl: doktercwe,
-  },
-];
-
-const petData = [
-  {
-    id: 1,
-    ras: "Anjing Husky Siberia",
-    nama: "Buddy",
-    kelamin: "Jantan",
-    usia: "2 Tahun",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_rD1FEh8AbGInF4erFbVsD7IjkuymuvjtxUGSztF6YqGfsUicwJqfo7iGhzbEwlC5nn8&usqp=CAU",
-  },
-  {
-    id: 2,
-    ras: "Kucing Scottish Fold",
-    nama: "Luna",
-    kelamin: "Betina",
-    usia: "1 Tahun",
-    imageUrl:
-      "https://asset.kompas.com/crops/W4P3no-vmu-9GnsCWwybHDufncM=/120x34:4222x2768/750x500/data/photo/2021/04/18/607ba95f8d6f7.jpg",
-  },
-  {
-    id: 3,
-    ras: "Anjing Beagle",
-    nama: "Max",
-    kelamin: "Jantan",
-    usia: "3 Tahun",
-    imageUrl:
-      "https://asset.kompas.com/crops/Tjk-lZqu-OWdgxYJeMyRjSzz1BQ=/46x0:1832x1191/750x500/data/photo/2022/08/26/63082fb8d14af.jpg",
-  },
-  {
-    id: 4,
-    ras: "Kucing Persia",
-    nama: "Mochi",
-    kelamin: "Betina",
-    usia: "6 Bulan",
-    imageUrl:
-      "https://trubus.id/wp-content/uploads/2023/10/Perawatan-Kucing-Persia.jpg",
-  },
-];
-
 const Card = ({ Imgurl, text, description }) => {
   return (
     <div className="bg-[#F1F1F1] shadow-md rounded-lg p-6">
@@ -124,45 +54,70 @@ const Card = ({ Imgurl, text, description }) => {
   );
 };
 
-const DoctorCard = ({ imageUrl, name, specialty, experience }) => {
-  return (
-    <div className="max-w-xs mx-1 bg-white rounded-xl shadow-lg overflow-hidden">
-      <img className="w-full h-52 object-contain" src={imageUrl} alt={name} />
-      <div className="p-4 flex flex-col items-start w-full">
-        <h2 className="text-xl font-semibold text-slate-900 line-clamp-1">
-          {name}
-        </h2>
-        <p className="text-gray-500 text-sm mt-2 line-clamp-1">
-          <span className="font-medium">Spesialis:</span> {specialty}
-        </p>
-        <p className="text-gray-500 text-sm mt-1">
-          <span className="font-medium">Pengalaman:</span> {experience}
-        </p>
-        <a href="/Detail-dokter-pria" className="w-full text-center">
-          <button className="mt-4 py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300 w-full">
-            Lihat Detail
-          </button>
-        </a>
+const DoctorCard = ({
+  image,
+  doctorName,
+  specialty,
+  experience,
+  onDetailClick,
+}) => (
+  <div className="max-w-sm bg-white rounded-xl shadow-lg overflow-hidden flex flex-col items-center font-poppins">
+    {image ? (
+      <img className="w-full h-60 object-cover" src={image} alt="Dokter" />
+    ) : (
+      <div className="w-full h-60 flex justify-center items-center">
+        <i className="fas fa-user-doctor text-9xl text-[#ED9455]"></i>
       </div>
+    )}
+    <div className="p-4 flex flex-col items-start w-full">
+      <h2 className="text-xl font-semibold text-slate-900 line-clamp-1">
+        {doctorName}
+      </h2>
+      <p className="text-gray-500 text-sm mt-2 line-clamp-1">
+        <span className="font-medium">Spesialis:</span> {specialty}
+      </p>
+      <p className="text-gray-500 text-sm mt-1">
+        <span className="font-medium">Pengalaman:</span> {experience}
+      </p>
+      <button
+        className="mt-4 w-full py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300"
+        onClick={onDetailClick}
+      >
+        Lihat Detail
+      </button>
     </div>
-  );
-};
+  </div>
+);
 
-const PetCard = ({ imageUrl, nama, ras, kelamin, usia }) => {
+const PetCard = ({
+  JenisHewan,
+  Nama,
+  Kelamin,
+  Usia,
+  imageUrl,
+  onDetailClick,
+}) => {
   return (
     <div className="max-w-xs mx-1 bg-white rounded-xl shadow-lg overflow-hidden">
-      <img className="w-full h-52 object-cover" src={imageUrl} alt={nama} />
+      <img className="w-full h-52 object-cover" src={imageUrl} alt={Nama} />
       <div className="px-6 py-4">
-        <div className="font-bold text-xl mb-2">
-          <h1>{ras}</h1>
+        <div className="font-bold text-xl mb-2 line-clamp-1">
+          <h1>{JenisHewan}</h1>
         </div>
-        <p className="text-[#667479] text-sm">Nama: {nama}</p>
+        <p className="text-[#667479] text-sm line-clamp-1">Nama: {Nama}</p>
         <div className="flex gap-2 items-center">
-          <p className="text-[#667479] text-sm">Kelamin: {kelamin}</p>
+          <p className="text-[#667479] text-sm line-clamp-1">
+            Kelamin: {Kelamin}
+          </p>
           <span className="text-[#667479] text-sm">&bull;</span>
-          <p className="text-[#667479] text-sm">Usia: {usia}</p>
+          <p className="text-[#667479] text-sm line-clamp-1">
+            Usia: {Usia} Bulan
+          </p>
         </div>
-        <button className="mt-4 w-full py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300">
+        <button
+          className="mt-4 w-full py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300"
+          onClick={onDetailClick}
+        >
           Lihat Detail
         </button>
       </div>
@@ -171,6 +126,43 @@ const PetCard = ({ imageUrl, nama, ras, kelamin, usia }) => {
 };
 
 const HomepageAfter = () => {
+  const navigate = useNavigate();
+  const [doctors, setDoctors] = useState([]);
+  const [pets, setPets] = useState([]);
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+
+    const fetchDoctors = async () => {
+      try {
+        const response = await axios.get("/doctors");
+        setDoctors(response.data.slice(0, 4)); // Display only 4 doctors
+      } catch (error) {
+        console.error("Failed to fetch doctors:", error);
+      }
+    };
+
+    const fetchPets = async () => {
+      try {
+        const response = await axios.get("/hewan");
+        setPets(response.data);
+      } catch (error) {
+        console.error("Failed to fetch pets:", error);
+      }
+    };
+
+    fetchDoctors();
+    fetchPets();
+  }, []);
+
+  const handleDoctorDetailClick = (doctorId) => {
+    navigate(`/doctor/${doctorId}`);
+  };
+
+  const handlePetDetailClick = (petId) => {
+    navigate(`/detailhewan/${petId}`);
+  };
+
   return (
     <div className="font-poppins">
       <NavbarAfter />
@@ -219,24 +211,22 @@ const HomepageAfter = () => {
         </div>
         <div className="w-full lg:w-1/2">
           <h2 className="text-4xl font-bold mb-10">Vaksinasi dan Imunisasi</h2>
-          <div className="text-gray-700 space-y-4 leading-relaxed">
-            <p>
-              Pastikan hewan peliharaan Anda mendapatkan vaksinasi dan imunisasi
-              yang diperlukan untuk menjaga kesehatan dan kekebalan tubuh
-              mereka.
-            </p>
-            <p>
-              Setiap vaksinasi adalah investasi dalam kesehatan dan
-              kesejahteraan hewan peliharaan Anda, memberikan mereka
-              perlindungan yang kuat dan memastikan bahwa mereka dapat hidup
-              dengan nyaman dan bahagia dalam lingkungan yang aman dan sehat.
-            </p>
-            <p>
-              Konsultasikan dengan dokter hewan Anda untuk mengetahui jenis
-              vaksinasi yang tepat dan jadwal yang sesuai untuk hewan peliharaan
-              Anda.
-            </p>
-          </div>
+          <div className="text-gray-700 space-y-4 leading-relaxed"></div>{" "}
+          <p>
+            Pastikan hewan peliharaan Anda mendapatkan vaksinasi dan imunisasi
+            yang diperlukan untuk menjaga kesehatan dan kekebalan tubuh mereka.
+          </p>
+          <p>
+            Setiap vaksinasi adalah investasi dalam kesehatan dan kesejahteraan
+            hewan peliharaan Anda, memberikan mereka perlindungan yang kuat dan
+            memastikan bahwa mereka dapat hidup dengan nyaman dan bahagia dalam
+            lingkungan yang aman dan sehat.
+          </p>
+          <p>
+            Konsultasikan dengan dokter hewan Anda untuk mengetahui jenis
+            vaksinasi yang tepat dan jadwal yang sesuai untuk hewan peliharaan
+            Anda.
+          </p>
         </div>
       </div>
 
@@ -250,20 +240,23 @@ const HomepageAfter = () => {
               Rekomendasi Dokter Hewan
             </div>
           </div>
-          <a href="/Daftar-dokter-hewan">
-            <button className="bg-[#ED9455] py-2 px-4 hover:bg-[#f89b59] transition duration-300 rounded-md flex justify-center items-center">
-              <span className="text-white">Tampilkan Lainnya</span>
-            </button>
-          </a>
+          <button
+            className="bg-[#ED9455] py-2 px-4 hover:bg-[#f89b59] transition duration-300 rounded-md flex justify-center items-center"
+            onClick={() => navigate("/Dokter-hewan")}
+          >
+            <span className="text-white">Tampilkan Lainnya</span>
+            <i className="fas fa-chevron-right ml-2 text-white"></i>
+          </button>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {doctorData.map((doctor) => (
+          {doctors.map((doctor) => (
             <DoctorCard
-              key={doctor.id}
-              imageUrl={doctor.imageUrl}
-              name={doctor.name}
-              specialty={doctor.specialty}
-              experience={doctor.experience}
+              key={doctor.id_dokter}
+              image={doctor.url_foto}
+              doctorName={doctor.nama}
+              specialty={doctor.spesialis}
+              experience={doctor.pengalaman}
+              onDetailClick={() => handleDoctorDetailClick(doctor.id_dokter)}
             />
           ))}
         </div>
@@ -305,19 +298,24 @@ const HomepageAfter = () => {
               Hewan yang Siap diadopsi
             </div>
           </div>
-          <button className="bg-[#ED9455] py-2 px-4 hover:bg-[#f89b59] transition duration-300 rounded-md flex justify-center items-center">
-            <span className="text-white">Tampilkan Semua</span>
+          <button
+            className="bg-[#ED9455] py-2 px-4 hover:bg-[#f89b59] transition duration-300 rounded-md flex justify-center items-center"
+            onClick={() => navigate("/Adopsi-hewan")}
+          >
+            <span className="text-white">Tampilkan Lainnya</span>
+            <i className="fas fa-chevron-right ml-2 text-white"></i>
           </button>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {petData.map((pet) => (
+          {pets.map((pet) => (
             <PetCard
-              key={pet.id}
-              imageUrl={pet.imageUrl}
-              nama={pet.nama}
-              ras={pet.ras}
-              kelamin={pet.kelamin}
-              usia={pet.usia}
+              key={pet.id_hewan}
+              Nama={pet.nama}
+              JenisHewan={pet.jenis_hewan}
+              Kelamin={pet.gender}
+              Usia={pet.usia}
+              imageUrl={pet.url_fotoutama}
+              onDetailClick={() => handlePetDetailClick(pet.id_hewan)}
             />
           ))}
         </div>
