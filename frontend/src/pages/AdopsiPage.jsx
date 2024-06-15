@@ -4,10 +4,15 @@ import Navbar from "../Components/Navbar-after";
 import Footer from "../Components/Footer-after";
 import axios from "../context/axiosConfig";
 import AdopsiBanner from "../assets/images/adopsi.png";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
 const Card = ({ JenisHewan, Nama, Kelamin, Usia, imageUrl, onDetailClick }) => {
   return (
-    <div className="max-w-xs mx-1 bg-white rounded-xl shadow-lg overflow-hidden">
+    <div
+      className="max-w-xs mx-1 bg-white rounded-xl shadow-lg overflow-hidden"
+      data-aos="fade-up"
+    >
       <img className="w-full h-52 object-cover" src={imageUrl} alt={Nama} />
       <div className="px-6 py-4">
         <div className="font-bold text-xl mb-2 line-clamp-1">
@@ -40,6 +45,7 @@ const AdopsiPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    AOS.init({ duration: 1000 });
 
     const fetchHewan = async () => {
       try {
@@ -65,6 +71,7 @@ const AdopsiPage = () => {
           src={AdopsiBanner}
           alt="adopsi"
           className="w-auto h-auto relative mb-8"
+          data-aos="fade-in"
         />
         <div className="absolute top-72 left-3/4 transform -translate-x-1/4 -translate-y-1/2 text-white px-12 py-4 text-left w-full max-w-full">
           <h1 className="text-4xl font-bold mb-2">Temukan Sahabat Baru</h1>

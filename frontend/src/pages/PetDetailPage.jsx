@@ -214,10 +214,10 @@ const PetDetailPage = () => {
         <div className="flex justify-between items-center mb-10">
           <div>
             <div className="text-black text-base font-normal mb-1">
-              Ingin mengadopsi hewan peliharaan yang lucu?
+              Belum menemukan hewan yang cocok?
             </div>
             <div className="text-[#ED9455] text-2xl font-extrabold capitalize mb-2">
-              Hewan yang Siap diadopsi
+              Lihat Hewan Lainnya
             </div>
           </div>
           <button

@@ -4,10 +4,14 @@ import Navbar from "../Components/Navbar-after";
 import Footer from "../Components/Footer-after";
 import axios from "../context/axiosConfig";
 import DokterHewan from "../assets/images/DokterHewan.png";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
-// Komponen Kartu (Card) yang menerima properti teks
 const Card = ({ image, doctorName, specialty, experience, onDetailClick }) => (
-  <div className="max-w-sm bg-white rounded-xl shadow-lg overflow-hidden flex flex-col items-center font-poppins">
+  <div
+    className="max-w-sm bg-white rounded-xl shadow-lg overflow-hidden flex flex-col items-center font-poppins"
+    data-aos="fade-up"
+  >
     {image ? (
       <img className="w-full h-60 object-cover" src={image} alt="Dokter" />
     ) : (
@@ -41,6 +45,7 @@ const DokterHewanPage = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+    AOS.init({ duration: 1000 });
 
     const fetchDoctors = async () => {
       try {
@@ -66,6 +71,7 @@ const DokterHewanPage = () => {
           src={DokterHewan}
           alt="Dokter Hewan"
           className="w-auto h-auto relative"
+          data-aos="fade-in"
         />
         <div className="absolute top-1/2 left-3/4 transform -translate-x-1/4 -translate-y-1/2 text-white px-12 py-4 text-left w-full max-w-full">
           <h1 className="text-4xl font-bold mb-2">Temukan Dokter Hewan</h1>
