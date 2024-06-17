@@ -25,6 +25,11 @@ const DetailDokter = () => {
     return <div>Loading...</div>;
   }
 
+  // Membuat URL untuk pencarian di Google Maps
+  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    doctor.alamat
+  )}`;
+
   return (
     <>
       <Navbar />
@@ -104,7 +109,10 @@ const DetailDokter = () => {
                     <button className="px-4 py-2 bg-[#ED9455] text-white rounded-lg hover:bg-[#d8854c]">
                       <a href="/Pop-Up-Konfirmasi">Konsultasi</a>
                     </button>
-                    <button className="px-4 py-2 bg-[#ED9455] text-white rounded-lg hover:bg-[#d8854c]">
+                    <button
+                      className="px-4 py-2 bg-[#ED9455] text-white rounded-lg hover:bg-[#d8854c]"
+                      onClick={() => window.open(googleMapsUrl, "_blank")}
+                    >
                       Lokasi Praktik
                     </button>
                   </div>

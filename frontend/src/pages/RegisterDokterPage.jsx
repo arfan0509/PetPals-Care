@@ -117,7 +117,7 @@ const RegisterDoctorPage = () => {
                   className="shadow appearance-none border rounded w-full py-2 px-3 bg-[#eee] text-gray-700 leading-tight focus
 focus
 "
-                  placeholder="Alamat Lengkap Praktek/Klinik"
+                  placeholder="Nama Klinik dan Alamat Lengkap Lokasi Praktek"
                 />
               </div>
               <div className="py-2">
@@ -220,7 +220,7 @@ focus
               </div>
               <div className="py-2">
                 <input
-                  type="text"
+                  type="number"
                   name="biaya"
                   value={formData.biaya}
                   onChange={handleChange}
