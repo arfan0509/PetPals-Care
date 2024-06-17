@@ -60,13 +60,17 @@ export const getHewanById = async (req, res) => {
     // Query untuk mendapatkan data hewan berdasarkan id_hewan
     const [rows] = await pool.query(
       `
-      SELECT h.id_hewan, h.nama AS nama, h.jenis_hewan, h.gender, h.usia, h.warna, h.lokasi, h.tgl_publish, h.deskripsi, h.foto_utama, h.url_fotoutama,
-             u.nama AS user_nama, u.alamat AS user_lokasi, u.no_hp AS user_no_hp, u.url_foto AS user_url_foto,
-             fh.id_foto, fh.foto AS foto_hewan, fh.url_foto
-      FROM hewan h
-      JOIN users u ON h.users_id_user = u.id_user
-      LEFT JOIN foto_hewan fh ON h.id_hewan = fh.hewan_id_hewan
-      WHERE h.id_hewan = ?
+      SELECT 
+    h.id_hewan, h.nama AS nama, h.jenis_hewan, h.gender, h.usia, h.warna, h.lokasi, 
+    DATE_FORMAT(h.tgl_publish, '%d %M %Y') AS tgl_publish, 
+    h.deskripsi, h.foto_utama, h.url_fotoutama,
+    u.nama AS user_nama, u.alamat AS user_lokasi, u.no_hp AS user_no_hp, u.url_foto AS user_url_foto,
+    fh.id_foto, fh.foto AS foto_hewan, fh.url_foto
+FROM hewan h
+JOIN users u ON h.users_id_user = u.id_user
+LEFT JOIN foto_hewan fh ON h.id_hewan = fh.hewan_id_hewan
+WHERE h.id_hewan = ?
+
     `,
       [hewanId]
     );
