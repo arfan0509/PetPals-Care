@@ -3,9 +3,10 @@ import axiosInstance from "../context/axiosConfig"; // Import axiosInstance yang
 import { jwtDecode } from "jwt-decode";
 import Logo from "../assets/images/logo.png";
 
-function NavbarAfter() {
+function NavbarAfter({ onSearch }) {
   const [isOpen, setIsOpen] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   // Fungsi untuk mengambil data pengguna dari server
   useEffect(() => {
@@ -28,6 +29,12 @@ function NavbarAfter() {
 
     fetchUserData();
   }, []);
+
+  // Fungsi untuk menangani submit pencarian
+  const handleSubmitSearch = async (e) => {
+    e.preventDefault();
+    onSearch(searchTerm); // Panggil prop onSearch yang diterima dari parent dengan parameter searchTerm
+  };
 
   return (
     <nav className="bg-[#F7DBA7] shadow-lg font-poppins">
@@ -70,16 +77,20 @@ function NavbarAfter() {
 
           {/* Search and User Button */}
           <div className="hidden md:flex items-center space-x-3 font-sans">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search..."
-                className="px-5 py-1 pl-10 border rounded-full focus:border-[#DE9455]"
-              />
-              <span className="absolute inset-y-0 left-0 pl-3 flex items-center">
-                <i className="fas fa-search text-gray-500"></i>
-              </span>
-            </div>
+            <form onSubmit={handleSubmitSearch}>
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  className="px-5 py-1 pl-10 border rounded-full focus:border-[#DE9455]"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+                <span className="absolute inset-y-0 left-0 pl-3 flex items-center">
+                  <i className="fas fa-search text-gray-500"></i>
+                </span>
+              </div>
+            </form>
             <div className="relative">
               <a href="/Profil">
                 <button className="ml-[120px] flex items-center justify-center w-12 h-12 bg-white border border-[#ED9455] text-[#ED9455] rounded-full hover:bg-[#f89b59] hover:text-white transition duration-300">
@@ -140,16 +151,20 @@ function NavbarAfter() {
           Tentang Kami
         </a>
         <div className="px-4 py-2">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-full px-2 py-1 pl-10 border rounded-md focus:border-[#DE9455]"
-            />
-            <span className="absolute inset-y-0 left-0 pl-3 flex items-center">
-              <i className="fas fa-search text-gray-500"></i>
-            </span>
-          </div>
+          <form onSubmit={handleSubmitSearch}>
+            <div className="relative">
+              <input
+                type="text"
+                placeholder="Search..."
+                className="w-full px-2 py-1 pl-10 border rounded-md focus:border-[#DE9455]"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <span className="absolute inset-y-0 left-0 pl-3 flex items-center">
+                <i className="fas fa-search text-gray-500"></i>
+              </span>
+            </div>
+          </form>
         </div>
         <div className="flex justify-center py-2 px-4 mx-4 my-2">
           <a href="/Profil">

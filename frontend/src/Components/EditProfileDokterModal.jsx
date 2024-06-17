@@ -18,6 +18,7 @@ const EditProfileDokterModal = ({ doctorData, onClose, onUpdate }) => {
     spesialis: doctorData.spesialis,
     lulusan: doctorData.lulusan,
     biaya: doctorData.biaya,
+    pengalaman: doctorData.pengalaman,
   });
 
   const handleChange = (e) => {
@@ -129,6 +130,16 @@ const EditProfileDokterModal = ({ doctorData, onClose, onUpdate }) => {
               type="text"
               name="lulusan"
               value={formData.lulusan}
+              onChange={handleChange}
+              className="w-full p-2 border border-gray-300 rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Pengalaman</label>
+            <input
+              type="number"
+              name="pengalaman"
+              value={formData.pengalaman}
               onChange={handleChange}
               className="w-full p-2 border border-gray-300 rounded"
             />

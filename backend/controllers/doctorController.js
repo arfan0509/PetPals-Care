@@ -125,6 +125,7 @@ export const updateDoctor = async (req, res) => {
     spesialis,
     lulusan,
     biaya,
+    pengalaman,
     oldPassword,
     newPassword,
   } = req.body;
@@ -142,6 +143,7 @@ export const updateDoctor = async (req, res) => {
       spesialis,
       lulusan,
       biaya,
+      pengalaman,
       doctorId,
     ];
     if (oldPassword && newPassword) {
@@ -163,7 +165,7 @@ export const updateDoctor = async (req, res) => {
     // Buat query untuk memperbarui data dokter
     const query = `
       UPDATE dokter
-      SET nama = ?, no_hp = ?, email = ?, gender = ?, usia = ?, alamat = ?, spesialis = ?, lulusan = ?, biaya = ?${passwordQuery}
+      SET nama = ?, no_hp = ?, email = ?, gender = ?, usia = ?, alamat = ?, spesialis = ?, lulusan = ?, biaya = ?, pengalaman = ?${passwordQuery}
       WHERE id_dokter = ?
     `;
 
@@ -177,7 +179,7 @@ export const updateDoctor = async (req, res) => {
 
     // Dapatkan data dokter yang telah diperbarui dari database
     const [updatedDoctor] = await pool.query(
-      "SELECT id_dokter, nama, no_hp, email, gender, usia, alamat, spesialis, lulusan, biaya FROM dokter WHERE id_dokter = ?",
+      "SELECT id_dokter, nama, no_hp, email, gender, usia, alamat, spesialis, lulusan, biaya, pengalaman FROM dokter WHERE id_dokter = ?",
       [doctorId]
     );
 

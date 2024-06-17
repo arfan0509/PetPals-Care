@@ -81,8 +81,20 @@ const PetDetailPage = () => {
     setSelectedImage(url);
   };
 
-  const handlePetDetailClick = (petId) => {
-    navigate(`/pet-detail/${petId}`);
+  const handleChatWithOwner = () => {
+    const phoneNumber = Hewan.user_no_hp;
+    const jenisHewanBold = `*${Hewan.jenis_hewan}*`;
+    const message = `Halo, saya tertarik untuk mengadopsi ${jenisHewanBold}.
+Jenis kelamin: ${Hewan.gender}.
+Usia: ${Hewan.usia} Bulan.
+Warna: ${Hewan.warna}.
+    
+Dimana saya mendapatkan informasi ini di situs *PetPals Care*`;
+
+    window.open(
+      `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
+      "_blank"
+    );
   };
 
   if (!Hewan) {
@@ -204,7 +216,10 @@ const PetDetailPage = () => {
               <span className="font-sans">{Hewan.user_no_hp}</span>
             </div>
           </div>
-          <button className="mt-6 px-6 py-3 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300">
+          <button
+            className="mt-6 px-6 py-3 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300"
+            onClick={handleChatWithOwner} // Menggunakan fungsi handleChatWithOwner untuk mengarahkan ke WhatsApp
+          >
             Chat dengan pemilik untuk adopsi
           </button>
         </div>

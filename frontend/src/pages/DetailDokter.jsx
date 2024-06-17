@@ -30,6 +30,18 @@ const DetailDokter = () => {
     doctor.alamat
   )}`;
 
+  // Fungsi untuk mengirim pesan WhatsApp
+  const openWhatsApp = () => {
+    const phoneNumber = doctor.no_hp;
+    const message =
+      "Halo Dokter, saya ingin berkonsultasi mengenai hewan peliharaan saya.";
+
+    window.open(
+      `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`,
+      "_blank"
+    );
+  };
+
   return (
     <>
       <Navbar />
@@ -51,7 +63,7 @@ const DetailDokter = () => {
                 )}
                 <div className="flex flex-col mt-3 sm:mt-0 w-full">
                   <h3 className="text-lg font-semibold leading-6 text-gray-900">
-                    {doctor.nama}
+                    Drh. {doctor.nama}
                   </h3>
 
                   <p className="mt-5 leading-6 text-gray-600">
@@ -106,8 +118,11 @@ const DetailDokter = () => {
                   </p>
 
                   <div className="mt-5 flex space-x-4">
-                    <button className="px-4 py-2 bg-[#ED9455] text-white rounded-lg hover:bg-[#d8854c]">
-                      <a href="/Pop-Up-Konfirmasi">Konsultasi</a>
+                    <button
+                      className="px-4 py-2 bg-[#ED9455] text-white rounded-lg hover:bg-[#d8854c]"
+                      onClick={openWhatsApp}
+                    >
+                      Konsultasi via WhatsApp
                     </button>
                     <button
                       className="px-4 py-2 bg-[#ED9455] text-white rounded-lg hover:bg-[#d8854c]"

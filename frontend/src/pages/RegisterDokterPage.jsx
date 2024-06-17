@@ -43,8 +43,17 @@ const RegisterDoctorPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Modifikasi nomor handphone ke format internasional
+    const formattedPhoneNumber = `62${formData.no_hp.replace(/^0/, "")}`;
+
+    // Ubah formData untuk nomor handphone yang sudah diformat
+    const modifiedFormData = {
+      ...formData,
+      no_hp: formattedPhoneNumber,
+    };
+
     try {
-      const response = await axios.post("/doctors/register", formData);
+      const response = await axios.post("/doctors/register", modifiedFormData);
 
       if (response.status === 201) {
         console.log("Registrasi dokter berhasil");

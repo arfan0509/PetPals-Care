@@ -26,12 +26,23 @@ const EditProfileModal = ({ userData, onClose, onUpdate }) => {
     e.preventDefault();
     const accessToken = localStorage.getItem("accessToken");
 
+    // Format nomor handphone ke format internasional (tanpa karakter '+')
+    const formattedPhoneNumber = `62${formData.no_hp.replace(/^0/, "")}`;
+
     try {
-      await axiosInstance.put("/users/update-data", formData, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
+      await axiosInstance.put(
+        "/users/update-data",
+        {
+          ...formData,
+          no_hp: formattedPhoneNumber, // Menggunakan nomor handphone yang sudah diformat
         },
-      });
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+
       onUpdate(formData); // Update data in parent component
       onClose(); // Close the modal
       window.location.reload();

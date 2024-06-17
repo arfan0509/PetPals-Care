@@ -122,7 +122,7 @@ const ProfilDokterPage = () => {
                 )}
               </div>
               <div>
-                <h1 className="text-xl font-medium">{doctorData.nama}</h1>
+                <h1 className="text-xl font-medium">Drh. {doctorData.nama}</h1>
                 <p>Dokter Hewan</p>
               </div>
             </div>

@@ -59,13 +59,25 @@ const AdopsiPage = () => {
     fetchHewan();
   }, []);
 
+  // Fungsi untuk melakukan pencarian berdasarkan jenis hewan
+  const searchPets = async (jenis_hewan) => {
+    try {
+      const response = await axios.get(
+        `/hewan/search?jenis_hewan=${jenis_hewan}`
+      );
+      setHewan(response.data);
+    } catch (error) {
+      console.error("Failed to search pets:", error);
+    }
+  };
+
   const handleDetailClick = (hewanId) => {
     navigate(`/detailhewan/${hewanId}`);
   };
 
   return (
     <>
-      <Navbar />
+      <Navbar onSearch={searchPets} />
       <div className="container px-20 py-8 font-poppins">
         <img
           src={AdopsiBanner}

@@ -39,13 +39,13 @@ const RegisterPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validasi sederhana
+    // Validate password match
     if (formData.password !== formData.confirmPassword) {
       setError("Kata sandi dan konfirmasi kata sandi tidak cocok.");
       return;
     }
 
-    // Validasi untuk memastikan semua bidang diisi
+    // Validate all fields are filled
     for (const key in formData) {
       if (formData[key] === "") {
         setError("Semua bidang harus diisi.");
@@ -54,9 +54,16 @@ const RegisterPage = () => {
     }
 
     try {
+      // Format nomor handphone ke format internasional (tanpa karakter '+')
+      const formattedPhoneNumber = `62${formData.no_hp.replace(/^0/, "")}`;
+
+      // Kirim data registrasi ke backend
       const response = await axios.post(
         "http://localhost:5000/api/users/register",
-        formData
+        {
+          ...formData,
+          no_hp: formattedPhoneNumber, // Menggunakan nomor handphone yang sudah diformat
+        }
       );
 
       if (response.status === 201) {

@@ -3,7 +3,7 @@ import {
   uploadHewan,
   uploadFotoHewan,
   getHewanWithUser,
-  // getHewanById,
+  searchHewanByJenis,
   getHewanByUserLogin,
   deleteHewan,
 } from "../controllers/hewanController.js";
@@ -31,6 +31,8 @@ router.post(
   uploadFotoHewanArray.array("photos", 5), // Menggunakan multer middleware untuk menghandle multiple files
   uploadFotoHewan
 );
+
+router.get("/search", searchHewanByJenis);
 
 router.get("/userHewan", verifyToken, getHewanByUserLogin);
 router.delete("/:id", verifyToken, deleteHewan);
