@@ -17,7 +17,7 @@ const EditProfileDokterModal = ({ doctorData, onClose, onUpdate }) => {
     alamat: doctorData.alamat,
     spesialis: doctorData.spesialis,
     lulusan: doctorData.lulusan,
-    biaya: doctorData.biaya,
+
     pengalaman: doctorData.pengalaman,
   });
 
@@ -144,16 +144,7 @@ const EditProfileDokterModal = ({ doctorData, onClose, onUpdate }) => {
               className="w-full p-2 border border-gray-300 rounded"
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Biaya Konsultasi</label>
-            <input
-              type="number"
-              name="biaya"
-              value={formData.biaya}
-              onChange={handleChange}
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
+
           {/* End of additional fields */}
           <div className="flex justify-end">
             <button

@@ -119,7 +119,7 @@ const LoginDokterPage = () => {
             </a>
           </div>
           <div className="p-4 flex justify-center items-center">
-            <a href="/Daftar-dokter">
+            <a href="/Verifikasi">
               <button className="w-auto h-auto bg-[#DE9455] hover:bg-[#D68B4B] text-white font-bold py-2 px-16 rounded-full font-semibold">
                 Daftar Dokter
               </button>

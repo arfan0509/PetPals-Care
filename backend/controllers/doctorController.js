@@ -8,7 +8,7 @@ export const getDoctorProfile = async (req, res) => {
   const doctorId = req.user.id; // Mengambil ID dokter dari token akses
   try {
     const [rows] = await pool.query(
-      "SELECT id_dokter, nama, no_hp, email, gender, usia, alamat, spesialis, lulusan, biaya, pengalaman, url_foto FROM dokter WHERE id_dokter = ?",
+      "SELECT id_dokter, nama, no_hp, email, gender, usia, alamat, spesialis, lulusan, pengalaman, url_foto FROM dokter WHERE id_dokter = ?",
       [doctorId]
     );
     res.status(200).json(rows);
@@ -30,7 +30,7 @@ export const registerDoctor = async (req, res) => {
     usia,
     lulusan,
     spesialis,
-    biaya,
+
     pengalaman,
   } = req.body;
 
@@ -48,7 +48,7 @@ export const registerDoctor = async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     await pool.query(
-      "INSERT INTO dokter (nama, no_hp, alamat, email, password, gender, usia, lulusan, spesialis, biaya, pengalaman) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+      "INSERT INTO dokter (nama, no_hp, alamat, email, password, gender, usia, lulusan, spesialis, pengalaman) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
       [
         nama,
         no_hp,
@@ -59,7 +59,7 @@ export const registerDoctor = async (req, res) => {
         usia,
         lulusan,
         spesialis,
-        biaya,
+
         pengalaman,
       ]
     );
@@ -124,7 +124,7 @@ export const updateDoctor = async (req, res) => {
     alamat,
     spesialis,
     lulusan,
-    biaya,
+
     pengalaman,
     oldPassword,
     newPassword,
@@ -142,7 +142,7 @@ export const updateDoctor = async (req, res) => {
       alamat,
       spesialis,
       lulusan,
-      biaya,
+
       pengalaman,
       doctorId,
     ];
@@ -165,7 +165,7 @@ export const updateDoctor = async (req, res) => {
     // Buat query untuk memperbarui data dokter
     const query = `
       UPDATE dokter
-      SET nama = ?, no_hp = ?, email = ?, gender = ?, usia = ?, alamat = ?, spesialis = ?, lulusan = ?, biaya = ?, pengalaman = ?${passwordQuery}
+      SET nama = ?, no_hp = ?, email = ?, gender = ?, usia = ?, alamat = ?, spesialis = ?, lulusan = ?, pengalaman = ?${passwordQuery}
       WHERE id_dokter = ?
     `;
 
@@ -179,7 +179,7 @@ export const updateDoctor = async (req, res) => {
 
     // Dapatkan data dokter yang telah diperbarui dari database
     const [updatedDoctor] = await pool.query(
-      "SELECT id_dokter, nama, no_hp, email, gender, usia, alamat, spesialis, lulusan, biaya, pengalaman FROM dokter WHERE id_dokter = ?",
+      "SELECT id_dokter, nama, no_hp, email, gender, usia, alamat, spesialis, lulusan, pengalaman FROM dokter WHERE id_dokter = ?",
       [doctorId]
     );
 
@@ -340,7 +340,7 @@ export const deleteDoctorAccount = async (req, res) => {
 export const getAllDoctors = async (req, res) => {
   try {
     const [rows] = await pool.query(
-      "SELECT id_dokter, nama, no_hp, email, gender, usia, alamat, spesialis, lulusan, biaya, pengalaman, url_foto FROM dokter"
+      "SELECT id_dokter, nama, no_hp, email, gender, usia, alamat, spesialis, lulusan, pengalaman, url_foto FROM dokter"
     );
     res.status(200).json(rows);
   } catch (error) {

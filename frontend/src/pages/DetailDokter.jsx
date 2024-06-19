@@ -109,12 +109,6 @@ const DetailDokter = () => {
                       </span>{" "}
                       {doctor.pengalaman}
                     </div>
-                    <div style={{ marginBottom: "8px" }}>
-                      <span style={{ color: "#564741" }}>
-                        <strong>Biaya Konsultasi:</strong>
-                      </span>{" "}
-                      Rp. {doctor.biaya}
-                    </div>
                   </p>
 
                   <div className="mt-5 flex space-x-4">

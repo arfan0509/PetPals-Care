@@ -16,7 +16,7 @@ const RegisterDoctorPage = () => {
     usia: "",
     lulusan: "",
     spesialis: "",
-    biaya: "",
+
     pengalaman: "",
   });
   const [error, setError] = useState("");
@@ -227,16 +227,7 @@ focus
                   placeholder="Spesialis"
                 />
               </div>
-              <div className="py-2">
-                <input
-                  type="number"
-                  name="biaya"
-                  value={formData.biaya}
-                  onChange={handleChange}
-                  className="shadow appearance-none border rounded w-full py-2 px-3 bg-[#eee] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="Biaya Konsultasi Online"
-                />
-              </div>
+
               <div className="py-2">
                 <input
                   type="number"

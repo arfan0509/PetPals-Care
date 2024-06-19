@@ -92,9 +92,7 @@ const ProfilDokterPage = () => {
             <li className="p-2 hover:bg-[#DE9455] hover:text-white border-collapse rounded-lg transition duration-200">
               <a href="/GantiPassword-dokter">Ubah Kata Sandi</a>
             </li>
-            <li className="p-2 hover:bg-[#DE9455] hover:text-white border-collapse rounded-lg transition duration-200">
-              <a href="#">Pesan</a>
-            </li>
+
             <div className="py-4"></div>
             <li className="p-2 hover:bg-red-500 hover:text-white border-collapse rounded-lg transition duration-200">
               <button onClick={logoutDoctor}>Keluar</button>
@@ -162,10 +160,7 @@ const ProfilDokterPage = () => {
               <p className="font-medium">Pengalaman</p>
               <p>{doctorData.pengalaman} Tahun</p>
             </div>
-            <div className="py-4">
-              <p className="font-medium">Biaya Konsultasi Online</p>
-              <p>Rp. {doctorData.biaya}</p>
-            </div>
+
             <button
               onClick={handleOpenEditModal}
               className="mt-4 py-2 px-4 bg-[#DE9455] text-white hover:bg-[#f89b59] transition duration-300 rounded"
