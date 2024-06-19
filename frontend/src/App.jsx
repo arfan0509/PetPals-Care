@@ -1,67 +1,146 @@
-import { Routes, Route } from "react-router-dom";
-import "./index.css";
-import AOS from "aos";
-import "aos/dist/aos.css";
 import React from "react";
-import Navbar from "./Components/Navbar";
-import Notfound from "./Components/Notfound";
-import Footer from "./Components/Footer";
-import HomepageBefore from "./pages/HomepageBefore";
-import HomepageAfter from "./pages/HomepageAfter";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
-import RegisterPage from "./pages/RegisterPage";
+import HomepageAfter from "./pages/HomepageAfter";
 import ProfilUserPage from "./pages/ProfilUserPage";
-import ProfilUserChat from "./pages/ProfilUserChat";
+import ProfilDokterPage from "./pages/ProfilDokter";
+import HomepageBefore from "./pages/HomepageBefore";
+import RegisterPage from "./pages/RegisterPage";
 import RegisterDokterPage from "./pages/RegisterDokterPage";
 import VerifikasiPage from "./pages/VerifikasiPage";
 import LoginDokterPage from "./pages/LoginDokterPage";
-import ProfilDokter from "./pages/ProfilDokter";
-import ChatDokterPage from "./pages/ChatDokterPage";
-import PostingHewanPage from "./pages/PostingHewanPage";
-import ChatPemilikPage from "./pages/ChatPemilikPage";
-import PetDetailPage from "./pages/PetDetailPage";
-import AdopsiPage from "./pages/AdopsiPage";
-import KonsultasiPage from "./pages/KonsultasiPage";
 import AboutUsPageBefore from "./pages/AboutUsPageBefore";
-import AboutUsPageAfter from "./pages/AboutUsPageAfter";
-import DetailDokterCowo from "./pages/DetailDokterCowo";
-import DetailDokterCewe from "./pages/DetailDokterCewe";
 import DokterHewanPage from "./pages/DokterHewanPage";
-import PopUpKonfirmasi from "./pages/PopUpKonfirmasi";
-import PopUpPosting from "./pages/PopUpPosting";
-import Verifikasi from "./pages/VerifikasiPage";
+import AdopsiPage from "./pages/AdopsiPage";
+import AboutUsPageAfter from "./pages/AboutUsPageAfter";
+import GantiPasswordUser from "./pages/GantiPasswordUser";
+import GantiPasswordDokter from "./pages/GantipasswordDokter";
+import PostingHewanPage from "./pages/PostingHewanPage";
+import DetailDokter from "./pages/DetailDokter";
+import PetDetailPage from "./pages/PetDetailPage";
 
-function App() {
+const PrivateRoute = ({ children }) => {
+  const isAuthenticated = localStorage.getItem("accessToken");
+  return isAuthenticated ? children : <Navigate to="/Login-PetPalsCare" />;
+};
+
+const App = () => {
   return (
-    <div>
+    <Router>
       <Routes>
-        <Route path="/" Component={HomepageBefore} />
-        <Route path="/Beranda" Component={HomepageAfter} />
-        <Route path="/Login-PetPalsCare" Component={LoginPage} />
-        <Route path="/Daftar-PetPalsCare" Component={RegisterPage} />
-        <Route path="/Profil" Component={ProfilUserPage} />
-        <Route path="/Profil-chat" Component={ProfilUserChat} />
-        <Route path="/Daftar-dokter" Component={RegisterDokterPage} />
-        <Route path="/Verifikasi" Component={VerifikasiPage} />
-        <Route path="/Login-dokter" Component={LoginDokterPage} />
-        <Route path="/Profil-dokter" Component={ProfilDokter} />
-        <Route path="/Chat-dokter" Component={ChatDokterPage} />
-        <Route path="/Posting-hewan" Component={PostingHewanPage} />
-        <Route path="/Chat-pemilik" Component={ChatPemilikPage} />
-        <Route path="/Detail-hewan" Component={PetDetailPage} />
-        <Route path="/Adopsi-hewan" Component={AdopsiPage} />
-        <Route path="/Konsultasi-dokter" Component={KonsultasiPage} />
-        <Route path="/Tentang-kami" Component={AboutUsPageBefore} />
-        <Route path="/Tentang-PetPalsCare" Component={AboutUsPageAfter} />
-        <Route path="/Detail-dokter-pria" Component={DetailDokterCowo} />
-        <Route path="/Detail-dokter-wanita" Component={DetailDokterCewe} />
-        <Route path="/Daftar-dokter-hewan" Component={DokterHewanPage} />
-        <Route path="/Pop-Up-Konfirmasi" Component={PopUpKonfirmasi} />
-        <Route path="/Upload-hewan" Component={PopUpPosting} />
-        <Route path="/Verifikasi" Component={Verifikasi} />
+        <Route path="/" element={<HomepageBefore />} />
+        <Route path="*" element={<Navigate to="/Login-PetPalsCare" />} />
+
+        <Route path="/Login-PetPalsCare" element={<LoginPage />} />
+        <Route path="/Daftar-PetPalsCare" element={<RegisterPage />} />
+        <Route path="/Daftar-dokter" element={<RegisterDokterPage />} />
+        <Route path="/Verifikasi" element={<VerifikasiPage />} />
+        <Route path="/Login-Dokter" element={<LoginDokterPage />} />
+        <Route path="/Tentang-kami" element={<AboutUsPageBefore />} />
+
+        <Route
+          path="/Beranda"
+          element={
+            <PrivateRoute>
+              <HomepageAfter />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/Profil"
+          element={
+            <PrivateRoute>
+              <ProfilUserPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/Dokter-hewan"
+          element={
+            <PrivateRoute>
+              <DokterHewanPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/Adopsi-hewan"
+          element={
+            <PrivateRoute>
+              <AdopsiPage />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/TentangKami"
+          element={
+            <PrivateRoute>
+              <AboutUsPageAfter />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/GantiPassword-user"
+          element={
+            <PrivateRoute>
+              <GantiPasswordUser />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/Profil-dokter"
+          element={
+            <PrivateRoute>
+              <ProfilDokterPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/GantiPassword-dokter"
+          element={
+            <PrivateRoute>
+              <GantiPasswordDokter />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/PostingHewan"
+          element={
+            <PrivateRoute>
+              <PostingHewanPage />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/doctor/:id"
+          element={
+            <PrivateRoute>
+              <DetailDokter />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/detailhewan/:id"
+          element={
+            <PrivateRoute>
+              <PetDetailPage />
+            </PrivateRoute>
+          }
+        />
       </Routes>
-    </div>
+    </Router>
   );
-}
+};
 
 export default App;

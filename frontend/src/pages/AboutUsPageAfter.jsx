@@ -1,3 +1,6 @@
+import React, { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import Foto1 from "../assets/images/fotoaboutus1.png";
 import Foto2 from "../assets/images/fotoaboutus2.png";
 import Foto3 from "../assets/images/fotoaboutus3.jpg";
@@ -5,6 +8,13 @@ import Footer from "../Components/Footer-after";
 import Navbar from "../Components/Navbar-after";
 
 const AboutUsPage = () => {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Duration of animation
+      once: true, // Whether animation should happen only once
+    });
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -12,7 +22,7 @@ const AboutUsPage = () => {
         <section className="overflow-hidden pt-20 pb-12 lg:pt-[120px] lg:pb-[90px] bg-white">
           <div className="container mx-auto">
             <div className="flex flex-wrap items-center justify-between -mx-4">
-              <div className="w-full px-4 lg:w-6/12">
+              <div className="w-full px-4 lg:w-6/12" data-aos="fade-right">
                 <div className="flex items-center -mx-3 sm:-mx-4">
                   <div className="w-full px-3 sm:px-4 xl:w-1/2">
                     <div className="py-3 sm:py-4">
@@ -600,7 +610,10 @@ const AboutUsPage = () => {
                 </div>
               </div>
 
-              <div className="w-full px-4 lg:w-1/2 xl:w-5/12">
+              <div
+                className="w-full px-4 lg:w-1/2 xl:w-5/12"
+                data-aos="fade-left"
+              >
                 <div className="mt-10 lg:mt-0">
                   <span className="block mb-4 text-lg font-bold text-custom-color">
                     Tentang PetPals Care

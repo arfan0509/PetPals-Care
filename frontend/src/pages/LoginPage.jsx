@@ -2,10 +2,13 @@ import { useState, useEffect } from "react";
 import Logo from "../assets/images/logo.png";
 import "aos/dist/aos.css";
 import AOS from "aos";
+import axiosInstance from "../context/axiosConfig";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
@@ -22,115 +25,123 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!email || !password) {
+      setError("Email dan kata sandi harus diisi.");
+      return;
+    }
+
     try {
-      const response = await fetch("http://localhost:5000/api/users/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
+      const response = await axiosInstance.post("/users/login", {
+        email,
+        password,
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        // Login berhasil, simpan token dan lakukan navigasi ke halaman setelah login
-        localStorage.setItem("accessToken", data.accessToken);
-        window.location.href = "/Beranda"; // Ganti dengan URL halaman setelah login
+      if (response.status === 200) {
+        const { accessToken, refreshToken } = response.data;
+        localStorage.setItem("accessToken", accessToken);
+        localStorage.setItem("refreshToken", refreshToken);
+        window.location.href = "/beranda";
       } else {
-        // Login gagal, tampilkan pesan kesalahan
-        alert(data.message);
+        setError("Login gagal, silakan coba lagi.");
       }
     } catch (error) {
-      // Tangani kesalahan jika terjadi
       console.error("Error:", error);
-      alert("Terjadi kesalahan saat melakukan login.");
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        setError(error.response.data.message);
+      } else {
+        setError("Terjadi kesalahan saat melakukan login.");
+      }
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
-    <>
-      <div className="flex justify-center items-center">
-        {/* Kiri */}
-        <div
-          className="w-1/2 h-screen flex justify-center items-center"
-          data-aos="fade-right"
-        >
-          <div className="w-full p-20 text-center">
-            <div className="text-lg w-auto h-auto font-semibold ">
-              <h1 className="">Masuk Akun PetPals Care</h1>
-            </div>
-            <form onSubmit={handleSubmit}>
-              <div className="py-4">
-                <input
-                  type="email"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 bg-[#eee] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="Email"
-                  value={email}
-                  onChange={handleEmailChange}
-                />
-              </div>
-              <div>
-                <input
-                  type="password"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 bg-[#eee] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  placeholder="Kata Sandi"
-                  value={password}
-                  onChange={handlePasswordChange}
-                />
-              </div>
-
-              <div className="p-4">
-                <button
-                  type="submit"
-                  className="w-auto h-auto bg-[#DE9455] hover:bg-[#D68B4B] text-white font-bold py-2 px-16 rounded-full font-semibold size-1 "
-                >
-                  Masuk Sekarang
-                </button>
-              </div>
-            </form>
+    <div className="flex justify-center items-center">
+      <div
+        className="w-1/2 h-screen flex justify-center items-center"
+        data-aos="fade-right"
+      >
+        <div className="w-full p-20 text-center">
+          <div className="text-lg w-auto h-auto font-semibold ">
+            <h1 className="">Masuk Akun PetPals Care</h1>
           </div>
+          <form onSubmit={handleSubmit}>
+            {error && <div className="text-red-500">{error}</div>}
+            <div className="py-4">
+              <input
+                type="email"
+                className="shadow appearance-none border rounded w-full py-2 px-3 bg-[#eee] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder="Email"
+                value={email}
+                onChange={handleEmailChange}
+              />
+            </div>
+            <div className="relative py-4">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="shadow appearance-none border rounded w-full py-2 px-3 bg-[#eee] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                placeholder="Kata Sandi"
+                value={password}
+                onChange={handlePasswordChange}
+              />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute inset-y-0 right-0 px-3 py-2"
+              >
+                {showPassword ? (
+                  <i className="fas fa-eye-slash"></i>
+                ) : (
+                  <i className="fas fa-eye"></i>
+                )}
+              </button>
+            </div>
+            <div className="p-4">
+              <button
+                type="submit"
+                className="w-auto h-auto bg-[#DE9455] hover:bg-[#D68B4B] text-white font-bold py-2 px-16 rounded-full font-semibold size-1 "
+              >
+                Masuk Sekarang
+              </button>
+            </div>
+          </form>
         </div>
-        {/* End Kiri */}
-
-        {/* Kanan */}
-        <div
-          className="w-1/2 h-screen bg-[#F7DBA7] flex justify-center items-center custom-border-radius"
-          data-aos="fade-left"
-        >
-          <div className="">
-            <div className="h-auto w-full max-w-72">
-              <a href="/" data-aos="zoom-in">
-                <img src={Logo} alt="Logo" />
-              </a>
-            </div>
-
-            <div
-              className="p-4 flex justify-center items-center"
-              data-aos="fade-up"
-            >
-              <a href="/Daftar-PetPalsCare">
-                <button className="w-auto h-auto bg-[#DE9455] hover:bg-[#D68B4B] text-white font-bold py-2 px-16 rounded-full font-semibold ">
-                  Daftar
-                </button>
-              </a>
-            </div>
-            <div
-              className="flex justify-center items-center "
-              data-aos="fade-up"
-            >
-              <a href="/Login-dokter" className="text-[#777]">
-                Masuk Sebagai Dokter Hewan
-              </a>
-            </div>
-          </div>
-        </div>
-        {/* End Kanan */}
       </div>
-    </>
+      <div
+        className="w-1/2 h-screen bg-[#F7DBA7] flex justify-center items-center custom-border-radius"
+        data-aos="fade-left"
+      >
+        <div className="">
+          <div className="h-auto w-full max-w-72">
+            <a href="/" data-aos="zoom-in">
+              <img src={Logo} alt="Logo" />
+            </a>
+          </div>
+          <div
+            className="p-4 flex justify-center items-center"
+            data-aos="fade-up"
+          >
+            <a href="/Daftar-PetPalsCare">
+              <button className="w-auto h-auto bg-[#DE9455] hover:bg-[#D68B4B] text-white font-bold py-2 px-16 rounded-full font-semibold ">
+                Daftar
+              </button>
+            </a>
+          </div>
+          <div className="flex justify-center items-center">
+            <a href="/Login-dokter" className="text-[#777]">
+              Masuk Sebagai Dokter Hewan
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

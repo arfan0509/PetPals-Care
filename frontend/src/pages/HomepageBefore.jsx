@@ -1,15 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 import Navbar from "../Components/Navbar";
+import Footer from "../Components/Footer";
 import heroImage from "../assets/images/hero-home.jpg";
 import image1 from "../assets/images/vectorhome1.png";
 import image2 from "../assets/images/vectorhome2.png";
 import image3 from "../assets/images/vectorhome3.png";
 import image4 from "../assets/images/vectorhome4.png";
-import doktercwo from "../assets/images/DokterCowo.png";
-import doktercwe from "../assets/images/DokterCewe.png";
 import vaksinKucing from "../assets/images/vaksinimg.jpg";
 import adoptionBgImage from "../assets/images/banner2.png";
-import Footer from "../Components/Footer";
 import AOS from "aos";
 import "aos/dist/aos.css";
 
@@ -44,76 +43,6 @@ const data = [
   },
 ];
 
-const doctorData = [
-  {
-    id: 1,
-    name: "Drh. Bagus Syahputra A",
-    specialty: "Hewan Domestik dan Eksotik",
-    experience: "7 Tahun",
-    imageUrl: doktercwo,
-  },
-  {
-    id: 2,
-    name: "Drh. Nurma Lala",
-    specialty: "Kucing dan Anjing",
-    experience: "5 Tahun",
-    imageUrl: doktercwe,
-  },
-  {
-    id: 3,
-    name: "Drh. Septian Priatama",
-    specialty: "Hewan Ternak dan Unggas",
-    experience: "10 Tahun",
-    imageUrl: doktercwo,
-  },
-  {
-    id: 4,
-    name: "Drh. Ami Kosriami",
-    specialty: "Anjing dan Kucing, Ternak",
-    experience: "15 Tahun",
-    imageUrl: doktercwe,
-  },
-];
-
-const petData = [
-  {
-    id: 1,
-    ras: "Anjing Husky Siberia",
-    nama: "Buddy",
-    kelamin: "Jantan",
-    usia: "2 Tahun",
-    imageUrl:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_rD1FEh8AbGInF4erFbVsD7IjkuymuvjtxUGSztF6YqGfsUicwJqfo7iGhzbEwlC5nn8&usqp=CAU",
-  },
-  {
-    id: 2,
-    ras: "Kucing Scottish Fold",
-    nama: "Luna",
-    kelamin: "Betina",
-    usia: "1 Tahun",
-    imageUrl:
-      "https://asset.kompas.com/crops/W4P3no-vmu-9GnsCWwybHDufncM=/120x34:4222x2768/750x500/data/photo/2021/04/18/607ba95f8d6f7.jpg",
-  },
-  {
-    id: 3,
-    ras: "Anjing Beagle",
-    nama: "Max",
-    kelamin: "Jantan",
-    usia: "3 Tahun",
-    imageUrl:
-      "https://asset.kompas.com/crops/Tjk-lZqu-OWdgxYJeMyRjSzz1BQ=/46x0:1832x1191/750x500/data/photo/2022/08/26/63082fb8d14af.jpg",
-  },
-  {
-    id: 4,
-    ras: "Kucing Persia",
-    nama: "Mochi",
-    kelamin: "Betina",
-    usia: "6 Bulan",
-    imageUrl:
-      "https://trubus.id/wp-content/uploads/2023/10/Perawatan-Kucing-Persia.jpg",
-  },
-];
-
 const Card = ({ Imgurl, text, description }) => {
   return (
     <div className="bg-[#F1F1F1] shadow-md rounded-lg p-6" data-aos="fade-up">
@@ -126,84 +55,100 @@ const Card = ({ Imgurl, text, description }) => {
   );
 };
 
-const DoctorCard = ({ imageUrl, name, specialty, experience }) => {
-  return (
-    <div
-      className="px-2 pt-2 bg-white rounded-xl shadow flex-col justify-start items-center gap-2 inline-flex"
-      data-aos="fade-up"
-    >
-      <div className="w-auto h-52 bg-white rounded-[10px] justify-center items-center ">
-        <img className="w-auto h-52" src={imageUrl} alt={name} />
+const DoctorCard = ({ image, doctorName, specialty, experience }) => (
+  <div
+    className="max-w-sm bg-white rounded-xl shadow-lg overflow-hidden flex flex-col items-center font-poppins"
+    data-aos="fade-up"
+  >
+    {image ? (
+      <img className="w-full h-60 object-cover" src={image} alt="Dokter" />
+    ) : (
+      <div className="w-full h-60 flex justify-center items-center">
+        <i className="fas fa-user-doctor text-9xl text-[#ED9455]"></i>
       </div>
-      <div className="px-2 pt-2 pb-5 flex-col justify-start items-start gap-2.5 flex">
-        <div className="flex-col justify-start items-start gap-1 flex">
-          <div className="self-stretch text-slate-900 text-xl font-normal leading-10">
-            {name}
-          </div>
-          <div className="self-stretch justify-start items-start gap-1 inline-flex">
-            <div className="justify-start items-start gap-1.5 flex">
-              <div className="w-[61px] h-[18px] text-gray-500 text-xs font-black">
-                Spesialis:
-              </div>
-              <div className="w-[171px] h-[18px] text-gray-500 text-xs font-normal">
-                {specialty}
-              </div>
-            </div>
-          </div>
-          <div className="justify-start items-start gap-1.5 inline-flex">
-            <div className="text-gray-500 text-xs font-black">Pengalaman:</div>
-            <div className="text-gray-500 text-xs font-normal">
-              {experience}
-            </div>
-          </div>
-        </div>
-        <button className="mt-4 w-full py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300">
-          <a href="/Login-PetPalsCare">Lihat Detail</a>
-        </button>
-      </div>
+    )}
+    <div className="p-4 flex flex-col items-start w-full">
+      <h2 className="text-xl font-semibold text-slate-900 line-clamp-1">
+        {doctorName}
+      </h2>
+      <p className="text-gray-500 text-sm mt-2 line-clamp-1">
+        <span className="font-medium">Spesialis:</span> {specialty}
+      </p>
+      <p className="text-gray-500 text-sm mt-1">
+        <span className="font-medium">Pengalaman:</span> {experience}
+      </p>
     </div>
-  );
-};
+    <button className="mt-4 w-full py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white transition duration-300">
+      <a href="/Login-PetPalsCare">Login Untuk Info Lengkap</a>
+    </button>
+  </div>
+);
 
-const PetCard = ({ imageUrl, nama, ras, kelamin, usia }) => {
+const PetCard = ({ JenisHewan, Nama, Kelamin, Usia, imageUrl }) => {
   return (
     <div
       className="max-w-xs mx-1 bg-white rounded-xl shadow-lg overflow-hidden"
       data-aos="fade-up"
     >
-      <img className="w-full h-52 object-cover" src={imageUrl} alt={nama} />
-      <div className="p-4">
-        <h2 className="text-xl font-bold text-slate-900">{nama}</h2>
-        <div className="mt-2 text-gray-600">
-          <p className="line-clamp-1">
-            <span className="font-semibold">Ras:</span> {ras}
+      <img className="w-full h-52 object-cover" src={imageUrl} alt={Nama} />
+      <div className="px-6 py-4">
+        <div className="font-bold text-xl mb-2 line-clamp-1">
+          <h1>{JenisHewan}</h1>
+        </div>
+        <p className="text-[#667479] text-sm line-clamp-1">Nama: {Nama}</p>
+        <div className="flex gap-2 items-center">
+          <p className="text-[#667479] text-sm line-clamp-1">
+            Kelamin: {Kelamin}
           </p>
-          <p>
-            <span className="font-semibold">Kelamin:</span> {kelamin}
-          </p>
-          <p>
-            <span className="font-semibold">Usia:</span> {usia}
+          <span className="text-[#667479] text-sm">&bull;</span>
+          <p className="text-[#667479] text-sm line-clamp-1">
+            Usia: {Usia} Bulan
           </p>
         </div>
-        <button className="mt-4 w-full py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300">
-          <a href="/Login-PetPalsCare">Lihat Detail</a>
-        </button>
       </div>
+      <button className="mt-4 w-full py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white transition duration-300">
+        <a href="/Login-PetPalsCare">Login Untuk Info Lengkap</a>
+      </button>
     </div>
   );
 };
 
 const HomepageBefore = () => {
+  const [doctors, setDoctors] = useState([]);
+  const [pets, setPets] = useState([]);
+
   useEffect(() => {
     AOS.init({ duration: 1000, once: true });
+
+    const fetchDoctors = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/doctors/");
+        const shuffledDoctors = response.data.sort(() => Math.random() - 0.5);
+        setDoctors(shuffledDoctors.slice(0, 4)); // Display only 4 doctors
+      } catch (error) {
+        console.error("Failed to fetch doctors:", error);
+      }
+    };
+
+    const fetchPets = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/hewan/");
+        const shuffledPets = response.data.sort(() => Math.random() - 0.5);
+        setPets(shuffledPets.slice(0, 4)); // Display only 4 pets
+      } catch (error) {
+        console.error("Failed to fetch pets:", error);
+      }
+    };
+
+    fetchDoctors();
+    fetchPets();
   }, []);
 
   return (
     <div className="font-poppins">
-      <div>
-        <Navbar />
-      </div>
+      <Navbar />
       <div
+        id="hero"
         className="relative w-full h-screen bg-cover bg-center"
         style={{ backgroundImage: `url(${heroImage})` }}
         data-aos="fade-in"
@@ -221,11 +166,9 @@ const HomepageBefore = () => {
             kesejahteraan hewan serta menciptakan kehidupan yang penuh
             kebahagiaan bagi mereka!
           </div>
-          <a href="/Login-PetPalsCare">
-            <button className="w-[163px] h-[48px] bg-[#ED9455] hover:bg-[#f89b59] transition duration-300 rounded-full flex justify-center items-center mt-10">
-              <span className="text-white">Jelajahi Sekarang</span>
-            </button>
-          </a>
+          <button className="w-[163px] h-[48px] bg-[#ED9455] hover:bg-[#f89b59] transition duration-300 rounded-full flex justify-center items-center mt-10">
+            <span className="text-white">Jelajahi Sekarang</span>
+          </button>
         </div>
       </div>
       <div className="container mx-auto p-8 pt-28">
@@ -283,23 +226,22 @@ const HomepageBefore = () => {
               Rekomendasi Dokter Hewan
             </div>
           </div>
-          <a href="/Login-PetPalsCare">
-            <button
-              className="bg-[#ED9455] py-2 px-4 hover:bg-[#f89b59] transition duration-300 rounded-md flex justify-center items-center"
-              data-aos="fade-left"
-            >
-              <span className="text-white">Tampilkan Lainnya</span>
-            </button>
-          </a>
+          <button
+            className="bg-[#ED9455] py-2 px-4 hover:bg-[#f89b59] transition duration-300 rounded-md flex justify-center items-center"
+            data-aos="fade-left"
+          >
+            <span className="text-white">Tampilkan Lainnya</span>
+            <i className="fas fa-chevron-right ml-2 text-white"></i>
+          </button>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {doctorData.map((doctor) => (
+          {doctors.map((doctor) => (
             <DoctorCard
-              key={doctor.id}
-              imageUrl={doctor.imageUrl}
-              name={doctor.name}
-              specialty={doctor.specialty}
-              experience={doctor.experience}
+              key={doctor.id_dokter}
+              image={doctor.url_foto}
+              doctorName={doctor.nama}
+              specialty={doctor.spesialis}
+              experience={doctor.pengalaman}
             />
           ))}
         </div>
@@ -343,26 +285,23 @@ const HomepageBefore = () => {
               Hewan yang Siap diadopsi
             </div>
           </div>
-          <a href="/Login-PetPalsCare">
-            <button
-              className="bg-[#ED9455] py-2 px-4 hover:bg-[#f89b59] transition duration-300 rounded-md flex justify-center items-center"
-              data-aos="fade-left"
-            >
-              <a href="/Adopsi-hewan" className="text-white">
-                Tampilkan Semua
-              </a>
-            </button>
-          </a>
+          <button
+            className="bg-[#ED9455] py-2 px-4 hover:bg-[#f89b59] transition duration-300 rounded-md flex justify-center items-center"
+            data-aos="fade-left"
+          >
+            <span className="text-white">Tampilkan Lainnya</span>
+            <i className="fas fa-chevron-right ml-2 text-white"></i>
+          </button>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {petData.map((pet) => (
+          {pets.map((pet) => (
             <PetCard
-              key={pet.id}
-              imageUrl={pet.imageUrl}
-              nama={pet.nama}
-              ras={pet.ras}
-              kelamin={pet.kelamin}
-              usia={pet.usia}
+              key={pet.id_hewan}
+              Nama={pet.nama}
+              JenisHewan={pet.jenis_hewan}
+              Kelamin={pet.gender}
+              Usia={pet.usia}
+              imageUrl={pet.url_fotoutama}
             />
           ))}
         </div>

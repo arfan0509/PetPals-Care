@@ -1,4 +1,4 @@
-import Logo from '../assets/images/logo.png'
+import Logo from "../assets/images/logo.png";
 
 import React from "react";
 
@@ -8,9 +8,9 @@ const Footer = () => {
       <footer className="relative z-10 pb-10 pt-20 bg-[#FCF1DC] lg:pb-20 lg:pt-[120px]">
         <div className="container">
           <div className="-mx-4 flex flex-wrap">
-            <div className="w-full px-4 sm:w-2/3 lg:w-3/12">
+            <div className=" w-full px-4 sm:w-2/3 lg:w-3/12">
               <div className="mb-10 w-full">
-                <a href="/#" className="mb-6 inline-block max-w-[160px]">
+                <a href="/#" className="mb-6 inline-block max-w-[90px]">
                   <img
                     src={Logo}
                     alt="logo"
@@ -23,7 +23,7 @@ const Footer = () => {
                   />
                 </a>
                 <p className="mb-7 text-base text-black">
-                Cintai, Rawat, Adopsi: Bersama Hewan Kesayangan Anda
+                  Cintai, Rawat, Adopsi: Bersama Hewan Kesayangan Anda
                 </p>
                 <p className="flex items-center text-sm font-medium text-black">
                   <span className="mr-3 text-black">
@@ -67,7 +67,10 @@ const Footer = () => {
               <NavLink link="/Tentang-kami" label="Tentang Kami" />
             </LinkGroup>
             <LinkGroup header="Kontak">
-              <NavLink link="https://www.google.com/maps/place/Kediri,+Kediri+Regency,+East+Java/@-7.8424141,111.9337856,12z/data=!3m1!4b1!4m6!3m5!1s0x2e78570dfd6e0647:0x25037b968333d9b2!8m2!3d-7.8480156!4d112.0178286!16s%2Fm%2F025vkkq?entry=ttu" label="Kota Kediri, Jawa Timur" />
+              <NavLink
+                link="https://www.google.com/maps/place/Kediri,+Kediri+Regency,+East+Java/@-7.8424141,111.9337856,12z/data=!3m1!4b1!4m6!3m5!1s0x2e78570dfd6e0647:0x25037b968333d9b2!8m2!3d-7.8480156!4d112.0178286!16s%2Fm%2F025vkkq?entry=ttu"
+                label="Kota Kediri, Jawa Timur"
+              />
               <NavLink link="/#" label="petpalscare@gmail.com" />
             </LinkGroup>
 
@@ -107,13 +110,14 @@ const Footer = () => {
                     href="javascript:void(0)"
                     className="mr-3 flex h-14 w-14 items-center justify-center rounded-full border border-stroke text-dark hover:bg-[#F7DBA7] hover:text-white dark:border-dark-3 dark:text-white dark:hover:bg-[#F7DBA7] sm:mr-4 lg:mr-3 xl:mr-4"
                   >
-                    <svg xmlns="http://www.w3.org/2000/svg" 
-                    width="24" 
-                    height="24" 
-                    viewBox="0 0 24 24"
-                    style={{ fill: "#C13584"}}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      style={{ fill: "#C13584" }}
                     >
-                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                      <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z" />
                     </svg>
                   </a>
                   <a
@@ -125,16 +129,13 @@ const Footer = () => {
                       height="24"
                       viewBox="0 0 16 12"
                       // className="fill-current"
-                      style={{ fill: "#c4302b"}}
+                      style={{ fill: "#c4302b" }}
                     >
                       <path d="M15.6645 1.88018C15.4839 1.13364 14.9419 0.552995 14.2452 0.359447C13.0065 6.59222e-08 8 0 8 0C8 0 2.99355 6.59222e-08 1.75484 0.359447C1.05806 0.552995 0.516129 1.13364 0.335484 1.88018C0 3.23502 0 6 0 6C0 6 0 8.79263 0.335484 10.1198C0.516129 10.8664 1.05806 11.447 1.75484 11.6406C2.99355 12 8 12 8 12C8 12 13.0065 12 14.2452 11.6406C14.9419 11.447 15.4839 10.8664 15.6645 10.1198C16 8.79263 16 6 16 6C16 6 16 3.23502 15.6645 1.88018ZM6.4 8.57143V3.42857L10.5548 6L6.4 8.57143Z" />
                     </svg>
                   </a>
-                  
                 </div>
-                <p className="text-base text-black">
-                  &copy; 2024 PetPals Care
-                </p>
+                <p className="text-base text-black">&copy; 2024 PetPals Care</p>
               </div>
             </div>
           </div>
@@ -207,9 +208,7 @@ const LinkGroup = ({ children, header }) => {
     <>
       <div className="w-full px-4 sm:w-1/2 lg:w-2/12">
         <div className="mb-10 w-full">
-          <h4 className="mb-9 text-lg font-semibold text-black">
-            {header}
-          </h4>
+          <h4 className="mb-9 text-lg font-semibold text-black">{header}</h4>
           <ul className="space-y-3">{children}</ul>
         </div>
       </div>

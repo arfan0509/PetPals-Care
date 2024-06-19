@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Logo from "../assets/images/logo.png";
 import "aos/dist/aos.css";
 import AOS from "aos";
@@ -14,6 +15,9 @@ const RegisterPage = () => {
     usia: "",
     alamat: "",
   });
+  const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   useEffect(() => {
     AOS.init({ duration: 1000 });
@@ -24,36 +28,69 @@ const RegisterPage = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await fetch("http://localhost:5000/api/users/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
+    // Validate password match
+    if (formData.password !== formData.confirmPassword) {
+      setError("Kata sandi dan konfirmasi kata sandi tidak cocok.");
+      return;
+    }
 
-      if (response.ok) {
-        // Registrasi berhasil, lakukan tindakan lanjutan seperti menavigasi pengguna ke halaman beranda
+    // Validate all fields are filled
+    for (const key in formData) {
+      if (formData[key] === "") {
+        setError("Semua bidang harus diisi.");
+        return;
+      }
+    }
+
+    try {
+      // Format nomor handphone ke format internasional (tanpa karakter '+')
+      const formattedPhoneNumber = `62${formData.no_hp.replace(/^0/, "")}`;
+
+      // Kirim data registrasi ke backend
+      const response = await axios.post(
+        "http://localhost:5000/api/users/register",
+        {
+          ...formData,
+          no_hp: formattedPhoneNumber, // Menggunakan nomor handphone yang sudah diformat
+        }
+      );
+
+      if (response.status === 201) {
+        // Registrasi berhasil, arahkan pengguna ke halaman login
         console.log("Registrasi berhasil");
         window.location.href = "/Login-PetPalsCare";
       } else {
         // Registrasi gagal, tangani kesalahan
-        const responseData = await response.json();
-        if (responseData.message === "Email already exists") {
+        setError("Gagal mendaftar, silakan coba lagi.");
+      }
+    } catch (error) {
+      console.error("Terjadi kesalahan:", error);
+      if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
+        if (error.response.data.message === "Email already exists") {
           alert(
             "Email sudah terdaftar. Silakan gunakan email lain atau masuk ke akun Anda."
           );
         } else {
-          console.error("Gagal mendaftar");
-          console.error("Error:", responseData.message); // Jika backend mengirimkan pesan kesalahan selain "Email already exists"
+          setError(error.response.data.message);
         }
+      } else {
+        setError("Terjadi kesalahan saat melakukan registrasi.");
       }
-    } catch (error) {
-      console.error("Terjadi kesalahan:", error);
     }
   };
 
@@ -61,10 +98,7 @@ const RegisterPage = () => {
     <>
       <div className="flex justify-center items-center">
         {/* kiri */}
-        <div
-          className="w-1/2 h-screen bg-[#F7DBA7] flex justify-center items-center custom-border-radius rotate-180"
-          data-aos="fade-left"
-        >
+        <div className="w-1/2 h-screen bg-[#F7DBA7] flex justify-center items-center custom-border-radius2">
           <div className="">
             <div className="h-auto w-full max-w-72" data-aos="zoom-in">
               <a href="/">
@@ -95,6 +129,7 @@ const RegisterPage = () => {
               <h1 className="">Daftar Akun</h1>
             </div>
             <form onSubmit={handleSubmit}>
+              {error && <div className="text-red-500">{error}</div>}
               <div className="py-2" data-aos="fade-up">
                 <input
                   type="text"
@@ -107,7 +142,7 @@ const RegisterPage = () => {
               </div>
               <div className="py-2" data-aos="fade-up">
                 <input
-                  type="text"
+                  type="number"
                   name="no_hp"
                   value={formData.no_hp}
                   onChange={handleChange}
@@ -125,25 +160,47 @@ const RegisterPage = () => {
                   placeholder="Email"
                 />
               </div>
-              <div className="py-2" data-aos="fade-up">
+              <div className="relative py-2" data-aos="fade-up">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
                   className="shadow appearance-none border rounded w-full py-2 px-3 bg-[#eee] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   placeholder="Kata Sandi"
                 />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute inset-y-0 right-0 px-3 py-2"
+                >
+                  {showPassword ? (
+                    <i className="fas fa-eye-slash"></i>
+                  ) : (
+                    <i className="fas fa-eye"></i>
+                  )}
+                </button>
               </div>
-              <div className="py-2" data-aos="fade-up">
+              <div className="relative py-2" data-aos="fade-up">
                 <input
-                  type="password"
+                  type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
                   value={formData.confirmPassword}
                   onChange={handleChange}
                   className="shadow appearance-none border rounded w-full py-2 px-3 bg-[#eee] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   placeholder="Konfirmasi Kata Sandi"
                 />
+                <button
+                  type="button"
+                  onClick={toggleConfirmPasswordVisibility}
+                  className="absolute inset-y-0 right-0 px-3 py-2"
+                >
+                  {showConfirmPassword ? (
+                    <i className="fas fa-eye-slash"></i>
+                  ) : (
+                    <i className="fas fa-eye"></i>
+                  )}
+                </button>
               </div>
               <div className="py-2" data-aos="fade-up">
                 <select
@@ -153,13 +210,13 @@ const RegisterPage = () => {
                   className="shadow appearance-none border rounded w-full py-2 px-3 bg-[#eee] text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 >
                   <option value="">Pilih Gender</option>
-                  <option value="Male">Laki-laki</option>
-                  <option value="Female">Perempuan</option>
+                  <option value="Laki-laki">Laki-laki</option>
+                  <option value="Perempuan">Perempuan</option>
                 </select>
               </div>
               <div className="py-2" data-aos="fade-up">
                 <input
-                  type="text"
+                  type="number"
                   name="usia"
                   value={formData.usia}
                   onChange={handleChange}

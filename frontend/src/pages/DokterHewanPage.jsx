@@ -1,14 +1,24 @@
-import React from "react";
-import DokterCewe from "../assets/images/DokterCewe.png";
-import DokterCowo from "../assets/images/DokterCowo.png";
-import DokterHewan from "../assets/images/DokterHewan.png";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import Navbar from "../Components/Navbar-after";
 import Footer from "../Components/Footer-after";
+import axios from "../context/axiosConfig";
+import DokterHewan from "../assets/images/DokterHewan.png";
+import AOS from "aos";
+import "aos/dist/aos.css";
 
-// Komponen Kartu (Card) yang menerima properti teks
-const Card = ({ image, doctorName, specialty, experience }) => (
-  <div className="max-w-sm bg-white rounded-xl shadow-lg overflow-hidden flex flex-col items-center font-poppins">
-    <img className="w-full h-72 object-fill" src={image} alt="Dokter" />
+const Card = ({ image, doctorName, specialty, experience, onDetailClick }) => (
+  <div
+    className="max-w-sm bg-white rounded-xl shadow-lg overflow-hidden flex flex-col items-center font-poppins"
+    data-aos="fade-up"
+  >
+    {image ? (
+      <img className="w-full h-60 object-cover" src={image} alt="Dokter" />
+    ) : (
+      <div className="w-full h-60 flex justify-center items-center">
+        <i className="fas fa-user-doctor text-9xl text-[#ED9455]"></i>
+      </div>
+    )}
     <div className="p-4 flex flex-col items-start w-full">
       <h2 className="text-xl font-semibold text-slate-900 line-clamp-1">
         {doctorName}
@@ -19,88 +29,39 @@ const Card = ({ image, doctorName, specialty, experience }) => (
       <p className="text-gray-500 text-sm mt-1">
         <span className="font-medium">Pengalaman:</span> {experience}
       </p>
-      <button className="mt-4 w-full py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300">
-        <a href="/Detail-dokter-pria">Lihat Detail</a>
+      <button
+        className="mt-4 w-full py-1 bg-[#ED9455] hover:bg-[#f89b59] text-white rounded-lg transition duration-300"
+        onClick={onDetailClick}
+      >
+        Lihat Detail
       </button>
     </div>
   </div>
 );
 
 const DokterHewanPage = () => {
-  const cardsData = [
-    {
-      image: DokterCowo,
-      doctorName: "Drh. Muhammad Ali",
-      specialty: "Hewan Domestik dan Eksotik",
-      experience: "7 Tahun",
-    },
-    {
-      image: DokterCewe,
-      doctorName: "Drh. Zahra Salsabila",
-      specialty: "Kucing dan Anjing",
-      experience: "7 Tahun",
-    },
-    {
-      image: DokterCowo,
-      doctorName: "Drh. Septian Priatama",
-      specialty: "Hewan Ternak dan Unggas",
-      experience: "7 Tahun",
-    },
-    {
-      image: DokterCewe,
-      doctorName: "Drh. Ami Kosriami",
-      specialty: "Anjing dan Kucing, Ternak",
-      experience: "7 Tahun",
-    },
-    {
-      image: DokterCowo,
-      doctorName: "Drh. Arjuna Wijaya",
-      specialty: "Hewan Domestik dan Eksotik",
-      experience: "10 Tahun",
-    },
-    {
-      image: DokterCewe,
-      doctorName: "Drh. Silvia Candra",
-      specialty: "Kucing dan Anjing",
-      experience: "5 Tahun",
-    },
-    {
-      image: DokterCowo,
-      doctorName: "Drh. Dimas Pratama",
-      specialty: "Hewan Ternak dan Unggas",
-      experience: "10 Tahun",
-    },
-    {
-      image: DokterCewe,
-      doctorName: "Drh. Diyah Pitaloka",
-      specialty: "Anjing dan Kucing, Ternak",
-      experience: "7 Tahun",
-    },
-    {
-      image: DokterCowo,
-      doctorName: "H.M.A.Cholik",
-      specialty: "Hewan Domestik dan Eksotik",
-      experience: "7 Tahun",
-    },
-    {
-      image: DokterCewe,
-      doctorName: "Drh. Anindita Ika A",
-      specialty: "Kucing dan Anjing",
-      experience: "5 Tahun",
-    },
-    {
-      image: DokterCowo,
-      doctorName: "Drh. Cokro Susmito",
-      specialty: "Hewan Ternak dan Unggas",
-      experience: "7 Tahun",
-    },
-    {
-      image: DokterCewe,
-      doctorName: "Drh. Yana Rosa",
-      specialty: "Anjing dan Kucing, Ternak",
-      experience: "7 Tahun",
-    },
-  ];
+  const [doctors, setDoctors] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    AOS.init({ duration: 1000 });
+
+    const fetchDoctors = async () => {
+      try {
+        const response = await axios.get("/doctors");
+        setDoctors(response.data);
+      } catch (error) {
+        console.error("Failed to fetch doctors:", error);
+      }
+    };
+
+    fetchDoctors();
+  }, []);
+
+  const handleDetailClick = (doctorId) => {
+    navigate(`/doctor/${doctorId}`);
+  };
 
   return (
     <>
@@ -110,6 +71,7 @@ const DokterHewanPage = () => {
           src={DokterHewan}
           alt="Dokter Hewan"
           className="w-auto h-auto relative"
+          data-aos="fade-in"
         />
         <div className="absolute top-1/2 left-3/4 transform -translate-x-1/4 -translate-y-1/2 text-white px-12 py-4 text-left w-full max-w-full">
           <h1 className="text-4xl font-bold mb-2">Temukan Dokter Hewan</h1>
@@ -122,14 +84,16 @@ const DokterHewanPage = () => {
         </div>
       </div>
       <div className="w-full h-auto pt-8 px-20 container">
-        <div>
-          {[...Array(3)].map((_, sectionIndex) => (
-            <div key={sectionIndex} className="py-8 flex gap-4">
-              {cardsData
-                .slice(sectionIndex * 4, sectionIndex * 4 + 4)
-                .map((card, index) => (
-                  <Card key={index} {...card} />
-                ))}
+        <div className="flex flex-wrap -mx-4">
+          {doctors.map((doctor, index) => (
+            <div key={index} className="w-full md:w-1/2 lg:w-1/4 px-4 mb-8">
+              <Card
+                image={doctor.url_foto}
+                doctorName={doctor.nama}
+                specialty={doctor.spesialis}
+                experience={doctor.pengalaman}
+                onDetailClick={() => handleDetailClick(doctor.id_dokter)}
+              />
             </div>
           ))}
         </div>

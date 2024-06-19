@@ -5,6 +5,8 @@ export default {
     extend: {},
     fontFamily: {
       poppins: ["Poppins"],
+      "poppins-bold": ["Poppins", "bold"],
+      "poppins-italic": ["Poppins", "italic"],
     },
   },
   plugins: [require("tailgrids/plugin")],
