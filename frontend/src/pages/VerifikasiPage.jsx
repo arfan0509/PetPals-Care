@@ -2,7 +2,7 @@ import logo from "../assets/images/logo.png";
 
 const VerifikasiPage = () => {
   const handleWhatsAppClick = () => {
-    const phoneNumber = "6285174248344";
+    const phoneNumber = "6289529758541";
     const message = encodeURIComponent(
       "Halo, saya tertarik untuk bergabung sebagai dokter di PetPals Care."
     );
