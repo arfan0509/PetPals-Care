@@ -31,7 +31,7 @@ app.use(morgan("dev"));
 // Menyajikan folder uploads/profile secara publik
 app.use("/uploads/profile", express.static(fileDir("profile")));
 
-// Menyajikan folder uploads/hewan secara publik
+// Menyajikan folder uploads/hewan scr publik
 app.use("/uploads/hewan", express.static(fileDir("hewan")));
 
 app.use(cookieParser());
